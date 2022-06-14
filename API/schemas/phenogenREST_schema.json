@@ -1,0 +1,668 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "version": "0.1",
+        "title": "PhenoGenREST",
+        "license": {
+            "name": "MIT"
+        }
+    },
+    "servers": [
+        {
+            "url": "https://rest.phenogen.org/"
+        }
+    ],
+    "paths": {
+        "/genomeBrowser/trackData": {
+            "get": {
+                "summary": "trackData - get gene/region data.",
+                "description": "Get data for a specific browser track from a specific region or for a gene.",
+                "operationId": "trackData",
+                "tags": [
+                    "trackData"
+                ],
+                "parameters": [
+                    {
+                        "name": "trackID",
+                        "in": "query",
+                        "description": "ID of the track",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "string"
+                        }
+                    },
+                    {
+                        "name": "genomeVer",
+                        "in": "query",
+                        "description": "Genome Version",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "string",
+                            "default":"rn6"
+                        }
+                    },
+                    {
+                        "name": "chromosome",
+                        "in": "query",
+                        "description": "Chromosome Location",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "string"
+                        }
+                    },
+                    {
+                        "name": "minCoord",
+                        "in": "query",
+                        "description": "Minimum coordinate",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "maxCoord",
+                        "in": "query",
+                        "description": "Maximum coordinate",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "binSize",
+                        "in": "query",
+                        "description": "Bin Size for binned data",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "version",
+                        "in": "query",
+                        "description": "Data Version(optional) - allows you to select previous versions of data otherwise the most recent version is used.",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "string",
+                            "default":""
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "JSON track data",
+                        "headers": {
+                            "x-next": {
+                                "description": "A link to the next page of responses",
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TrackData"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/genomeBrowser/views": {
+            "get": {
+                "summary": "",
+                "operationId": "",
+                "tags": [""],
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "headers": {
+                            "x-next": {
+                                "description": "A link to the next page of responses",
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TrackData"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/genomeBrowser/tracks": {
+            "get": {
+                "summary": "",
+                "operationId": "",
+                "tags": [""],
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "headers": {
+                            "x-next": {
+                                "description": "A link to the next page of responses",
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TrackData"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/downloads/datasets": {
+            "get": {
+                "summary": "datasets - get a list of available datasets.",
+                "operationId": "datasets",
+                "tags": ["datasets"],
+                "parameters": [
+                    {
+                        "name": "genomeVer",
+                        "in": "query",
+                        "description": "Genome Version - rn6,rn5,mm10",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "string",
+                            "default":""
+                        }
+                    },
+                    {
+                        "name": "organism",
+                        "in": "query",
+                        "description": "Organism - Rn,Mm",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "string",
+                            "default":"Rn"
+                        }
+                    },
+                    {
+                        "name": "tissue",
+                        "in": "query",
+                        "description": "tissue",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "string",
+                            "default":""
+                        }
+                    },
+                    {
+                        "name": "panel",
+                        "in": "query",
+                        "description": "Animal Panel - HRDP,LXS,BXH/HXB",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "string",
+                            "default":""
+                        }
+                    },
+                    {
+                        "name": "type",
+                        "in": "query",
+                        "description": "Seqeuncing Type - totalRNA,smallRNA",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "string",
+                            "default":""
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "headers": {
+                            
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/datasets"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/downloads/datasetFiles": {
+            "get": {
+                "summary": "datasetFiles - get a list of result files for a given dataset",
+                "operationId": "datasetFiles",
+                "tags": ["datasetFiles"],
+                "parameters": [
+                    {
+                        "name": "datasetID",
+                        "in": "query",
+                        "description": "Dataset ID to retreive a list of files for.",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64",
+                            "default":0
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "headers": {
+                            
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/datasetFiles"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/downloads/datasetFile": {
+            "get": {
+                "summary": "",
+                "operationId": "",
+                "tags": [""],
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "headers": {
+                            "x-next": {
+                                "description": "A link to the next page of responses",
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TrackData"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/downloads/datasetMetaData":{
+            "get": {
+                "summary": "",
+                "operationId": "",
+                "tags": [""],
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "headers": {
+                            "x-next": {
+                                "description": "A link to the next page of responses",
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TrackData"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/genes/eQTL":{
+            "get": {
+                "summary": "",
+                "operationId": "",
+                "tags": [""],
+                "parameters": [
+                     {
+                        "name": "gene",
+                        "in": "query",
+                        "description": "Gene parameter This should correspond to a PhenoGen ID or an Affy Transcript Cluster ID of the gene.",
+                        "required": true,
+                        
+                        "schema": {
+                            "type": "string",
+                            "format": "string"
+                        }
+                    },
+                    {
+                        "name": "type",
+                        "in": "query",
+                        "description": "Type parameter - This parameter specifies the data source to use [seq, array]. Default: seq",
+                        "example":"seq,array",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "string"
+                        }
+                    },
+                    {
+                        "name": "cutoff",
+                        "in": "query",
+                        "description": "Cutoff parameter - This parameter specifies -log(Pvalue) cutoff to use the returned values must be >=cutoff. The default is 2.0.",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "string"
+                        }
+                    },
+                    {
+                        "name": "tissues",
+                        "in": "query",
+                        "description": "Tissues parameter - This parameter specifies tissues to retreive eQTLs for as a comma seperated list. Options depend on source type. For rat options are source:RNASeq: [Brain,Liver] source:Array:[Brain,Heart,Liver,BAT].",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "string"
+                        }
+                    },
+                    {
+                        "name": "genomeVersion",
+                        "in": "query",
+                        "description": "GenomeVersion parameter - This parameter specifies genomeVersion to return results for. Currently supported versions [mm10,rn5,rn6]",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "string"
+                        }
+                    },
+                    {
+                        "name": "version",
+                        "in": "query",
+                        "description": "Version parameter - This parameter specifies the rna_dataset version to use for the results.  This corresponds to the version of the HRDP dataset.  The default is the most recent version",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "headers": {
+                            "x-next": {
+                                "description": "A link to the next page of responses",
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TrackData"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/genes/gene":{
+            "get": {
+                "summary": "",
+                "operationId": "",
+                "tags": [""],
+                "parameters": [
+                    {
+                        "name": "gene",
+                        "in": "query",
+                        "description": "This parameter is required to pull up a gene report.  This should correspond to the ensembl ID or PhenoGen ID of the gene.",
+                        "required": true,
+                        
+                        "schema": {
+                            "type": "string",
+                            "format": "string"
+                        }
+                    },
+                    {
+                        "name": "report",
+                        "in": "query",
+                        "description": "This parameter specifies the type of report returned.  Options: [generic,snp,transcript]",
+                        "example":"seq,array",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "headers": {
+                            "x-next": {
+                                "description": "A link to the next page of responses",
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TrackData"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/genes/idLookup":{
+            "get": {
+                "summary": "",
+                "operationId": "",
+                "tags": [""],
+                "parameters": [
+                    {
+                        "name": "gene",
+                        "in": "query",
+                        "description": "Any supported Gene ID",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "string"
+                        }
+                    },
+                    {
+                        "name": "organism",
+                        "in": "query",
+                        "description": "This parameter specifies the species to use to find the ID specified. [Rn,Mm,Hs] default: Rn",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "string",
+                            "default":"Rn"
+                        }
+                    },
+                    {
+                        "name": "level",
+                        "in": "query",
+                        "description": "The number of connections from the source to traverse to find matching IDs.  Lower levels will be more directly connected and help eliminate retreiving loosly connected IDs. If IDs expected to be returned aren't returned increaseing the level by 1-2 may help.",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default":"1"
+                        }
+                    },
+                    {
+                        "name": "targetList",
+                        "in": "query",
+                        "description": "This parameter specifies ID Types of interest and limits results to IDs of the specified type(s).  Comma seperated list of target IDs.",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "string",
+                            "default":""
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "headers": {
+                            "x-next": {
+                                "description": "A link to the next page of responses",
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TrackData"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/genes/WGCNA":{
+            "get": {
+                "summary": "",
+                "operationId": "",
+                "tags": [""],
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "headers": {
+                            "x-next": {
+                                "description": "A link to the next page of responses",
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TrackData"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "datasets": {
+                "type": "object",
+                "required": [
+                    "dataset_id",
+                    "organism",
+                    "panel",
+                    "description",
+                    "created",
+                    "tissue",
+                    "seq_type"
+                ],
+                "properties": {
+                    "dataset_id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "organism": {
+                        "type": "string"
+                    },
+                    "panel": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "date_created": {
+                        "type": "string"
+                    },
+                    "tissue": {
+                        "type": "string"
+                    },
+                    "sequenceing_type": {
+                        "type": "string"
+                    },
+                    "genome_version": {
+                        "type": "string"
+                    }
+                }
+            },
+            "TrackData": {
+                "type": "object",
+                "required": [
+                    "id",
+                    "name"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "tag": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Error": {
+                "type": "object",
+                "required": [
+                    "code",
+                    "message"
+                ],
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "message": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    }
+    
+}

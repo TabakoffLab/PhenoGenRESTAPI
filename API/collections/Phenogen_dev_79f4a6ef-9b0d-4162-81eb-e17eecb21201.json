@@ -1,0 +1,718 @@
+{
+	"info": {
+		"_postman_id": "c39107bb-b990-4b4f-a0cc-85b040b2ad48",
+		"name": "Phenogen_dev",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "genome Browser",
+			"item": [
+				{
+					"name": "Get Data for a specific track",
+					"id": "0177a871-26b5-426e-a9e0-309397a11ddd",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/genomeBrowser/trackData?trackID=e&genomeVer=rn6&chromosome=e&minCoord=-66696259&maxCoord=-66696259&binSize=-66696259&version=",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"genomeBrowser",
+								"trackData"
+							],
+							"query": [
+								{
+									"key": "trackID",
+									"value": "e",
+									"description": "(Required) ID of the track"
+								},
+								{
+									"key": "genomeVer",
+									"value": "rn6",
+									"description": "Genome Version"
+								},
+								{
+									"key": "chromosome",
+									"value": "e",
+									"description": "(Required) Chromosome Location"
+								},
+								{
+									"key": "minCoord",
+									"value": "-66696259",
+									"description": "(Required) Minimum coordinate"
+								},
+								{
+									"key": "maxCoord",
+									"value": "-66696259",
+									"description": "(Required) Maximum coordinate"
+								},
+								{
+									"key": "binSize",
+									"value": "-66696259",
+									"description": "Bin Size for binned data"
+								},
+								{
+									"key": "version",
+									"value": "",
+									"description": "Data Version(optional) - allows you to select previous versions of data otherwise the most recent version is used."
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"id": "74a89177-bfe8-4c3c-973e-41c79fde57a0",
+							"name": "JSON track data",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/genomeBrowser/trackData?trackID=e&genomeVer=rn6&chromosome=e&minCoord=-66696259&maxCoord=-66696259&binSize=-66696259&version=",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"genomeBrowser",
+										"trackData"
+									],
+									"query": [
+										{
+											"key": "trackID",
+											"value": "e"
+										},
+										{
+											"key": "genomeVer",
+											"value": "rn6"
+										},
+										{
+											"key": "chromosome",
+											"value": "e"
+										},
+										{
+											"key": "minCoord",
+											"value": "-66696259"
+										},
+										{
+											"key": "maxCoord",
+											"value": "-66696259"
+										},
+										{
+											"key": "binSize",
+											"value": "-66696259"
+										},
+										{
+											"key": "version",
+											"value": ""
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"disabled": false,
+									"description": "A link to the next page of responses",
+									"key": "x-next",
+									"value": "e"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"responseTime": null,
+							"body": "{\n \"id\": 70967171,\n \"name\": \"officia velit sint Ut commodo\",\n \"tag\": \"sit\"\n}"
+						}
+					]
+				},
+				{
+					"name": "/genomeBrowser/views",
+					"id": "55c73a35-8c97-4583-b513-740adfae5e53",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/genomeBrowser/views",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"genomeBrowser",
+								"views"
+							]
+						}
+					},
+					"response": [
+						{
+							"id": "675478e9-eec1-45ee-ad55-72be86bd0044",
+							"name": "response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/genomeBrowser/views",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"genomeBrowser",
+										"views"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"disabled": false,
+									"description": "A link to the next page of responses",
+									"key": "x-next",
+									"value": "e"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"responseTime": null,
+							"body": "{\n \"id\": 70967171,\n \"name\": \"officia velit sint Ut commodo\",\n \"tag\": \"sit\"\n}"
+						}
+					]
+				},
+				{
+					"name": "/genomeBrowser/tracks",
+					"id": "3df95c9a-8814-4da7-a008-f7033cb6b677",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/genomeBrowser/tracks",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"genomeBrowser",
+								"tracks"
+							]
+						}
+					},
+					"response": [
+						{
+							"id": "2b55224e-c48e-440f-a21c-3f71c869d6cf",
+							"name": "response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/genomeBrowser/tracks",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"genomeBrowser",
+										"tracks"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"disabled": false,
+									"description": "A link to the next page of responses",
+									"key": "x-next",
+									"value": "e"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"responseTime": null,
+							"body": "{\n \"id\": 70967171,\n \"name\": \"officia velit sint Ut commodo\",\n \"tag\": \"sit\"\n}"
+						}
+					]
+				}
+			],
+			"id": "ead4e74d-5b7a-4b8e-99f1-4d41583ee10e"
+		},
+		{
+			"name": "downloads",
+			"item": [
+				{
+					"name": "/downloads/datasets",
+					"id": "7605198f-4249-4848-8d45-be97ec0ed681",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/downloads/datasets",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"downloads",
+								"datasets"
+							]
+						}
+					},
+					"response": [
+						{
+							"id": "b6c65a97-b248-473f-aa94-a4eb72d41e35",
+							"name": "response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/downloads/datasets",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"downloads",
+										"datasets"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"disabled": false,
+									"description": "A link to the next page of responses",
+									"key": "x-next",
+									"value": "e"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"responseTime": null,
+							"body": "{\n \"id\": 70967171,\n \"name\": \"officia velit sint Ut commodo\",\n \"tag\": \"sit\"\n}"
+						}
+					]
+				},
+				{
+					"name": "/downloads/datasetFiles",
+					"id": "743e92f7-d120-4fb4-93a4-9bf1f2702083",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/downloads/datasetFiles",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"downloads",
+								"datasetFiles"
+							]
+						}
+					},
+					"response": [
+						{
+							"id": "ec7f515a-a305-4b04-bd55-2ca7a58ddd5d",
+							"name": "response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/downloads/datasetFiles",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"downloads",
+										"datasetFiles"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"disabled": false,
+									"description": "A link to the next page of responses",
+									"key": "x-next",
+									"value": "e"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"responseTime": null,
+							"body": "{\n \"id\": 70967171,\n \"name\": \"officia velit sint Ut commodo\",\n \"tag\": \"sit\"\n}"
+						}
+					]
+				},
+				{
+					"name": "/downloads/datasetFile",
+					"id": "86ef7c24-e7ee-47b4-896f-4b5a8535dc28",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/downloads/datasetFile",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"downloads",
+								"datasetFile"
+							]
+						}
+					},
+					"response": [
+						{
+							"id": "f2e6160d-1845-49ab-b2cf-4f0ba7cc76a0",
+							"name": "response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/downloads/datasetFile",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"downloads",
+										"datasetFile"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"disabled": false,
+									"description": "A link to the next page of responses",
+									"key": "x-next",
+									"value": "e"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"responseTime": null,
+							"body": "{\n \"id\": 70967171,\n \"name\": \"officia velit sint Ut commodo\",\n \"tag\": \"sit\"\n}"
+						}
+					]
+				},
+				{
+					"name": "/downloads/datasetMetaData",
+					"id": "d1e8ab10-8ee0-4d9f-887c-c5e123cea3fb",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/downloads/datasetMetaData",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"downloads",
+								"datasetMetaData"
+							]
+						}
+					},
+					"response": [
+						{
+							"id": "506c74f0-1df2-462b-a070-5ad3cbf1757e",
+							"name": "response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/downloads/datasetMetaData",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"downloads",
+										"datasetMetaData"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"disabled": false,
+									"description": "A link to the next page of responses",
+									"key": "x-next",
+									"value": "e"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"responseTime": null,
+							"body": "{\n \"id\": 70967171,\n \"name\": \"officia velit sint Ut commodo\",\n \"tag\": \"sit\"\n}"
+						}
+					]
+				}
+			],
+			"id": "76dc7b37-3beb-4466-88a9-19f886989aaf"
+		},
+		{
+			"name": "genes",
+			"item": [
+				{
+					"name": "/genes/eQTL",
+					"id": "b311b32e-55be-4beb-bea5-4f3e4eec1738",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/genes/eQTL",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"genes",
+								"eQTL"
+							]
+						}
+					},
+					"response": [
+						{
+							"id": "c080d861-68fb-4a43-8571-cf34f03ccd5c",
+							"name": "response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/genes/eQTL",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"genes",
+										"eQTL"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"disabled": false,
+									"description": "A link to the next page of responses",
+									"key": "x-next",
+									"value": "e"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"responseTime": null,
+							"body": "{\n \"id\": 70967171,\n \"name\": \"officia velit sint Ut commodo\",\n \"tag\": \"sit\"\n}"
+						}
+					]
+				},
+				{
+					"name": "/genes/gene",
+					"id": "1518c3c6-aea0-4ba0-ab61-25e0b799716e",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/genes/gene",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"genes",
+								"gene"
+							]
+						}
+					},
+					"response": [
+						{
+							"id": "dce2c05b-2e7f-4b87-8124-ef6490d0fa23",
+							"name": "response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/genes/gene",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"genes",
+										"gene"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"disabled": false,
+									"description": "A link to the next page of responses",
+									"key": "x-next",
+									"value": "e"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"responseTime": null,
+							"body": "{\n \"id\": 70967171,\n \"name\": \"officia velit sint Ut commodo\",\n \"tag\": \"sit\"\n}"
+						}
+					]
+				},
+				{
+					"name": "/genes/idLookup",
+					"id": "713b4486-0415-4158-99ff-3c6777dcffbf",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/genes/idLookup",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"genes",
+								"idLookup"
+							]
+						}
+					},
+					"response": [
+						{
+							"id": "4e5d3aba-c1f2-41fd-8ac6-621b7e1c4e34",
+							"name": "response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/genes/idLookup",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"genes",
+										"idLookup"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"disabled": false,
+									"description": "A link to the next page of responses",
+									"key": "x-next",
+									"value": "e"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"responseTime": null,
+							"body": "{\n \"id\": 70967171,\n \"name\": \"officia velit sint Ut commodo\",\n \"tag\": \"sit\"\n}"
+						}
+					]
+				},
+				{
+					"name": "/genes/WGCNA",
+					"id": "b4424727-0a6c-401b-9214-fd0eaf41eb05",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/genes/WGCNA",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"genes",
+								"WGCNA"
+							]
+						}
+					},
+					"response": [
+						{
+							"id": "b5c8fe43-37a9-48d9-a984-9c143267b108",
+							"name": "response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/genes/WGCNA",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"genes",
+										"WGCNA"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"disabled": false,
+									"description": "A link to the next page of responses",
+									"key": "x-next",
+									"value": "e"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"responseTime": null,
+							"body": "{\n \"id\": 70967171,\n \"name\": \"officia velit sint Ut commodo\",\n \"tag\": \"sit\"\n}"
+						}
+					]
+				}
+			],
+			"id": "a6275a16-373f-4eb9-9824-9dde2eb8dc85"
+		}
+	],
+	"variable": [
+		{
+			"id": "c221fec6-cec2-49d2-85b0-d315cd269a84",
+			"key": "baseUrl",
+			"value": "http://rest.phenogen.org/",
+			"type": "string"
+		}
+	]
+}
