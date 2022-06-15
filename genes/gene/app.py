@@ -2,15 +2,22 @@ import os, json, pymysql
 import boto3,MyDBConnection
 
 
-
 def respond(err, res=None):
+  body = ""
+  if err:
+    if (res is not None):
+      body = {"message": err.message, "help": json.dumps(res)}
+    else:
+      body = {"message": err.message}
+  else:
+    body = json.dumps(res)
   return {
     'statusCode': '400' if err else '200',
-    'body': err.message if err else json.dumps(res),
+    'body': body,
     'headers': {
       'Content-Type': 'application/json',
     },
-    "isBase64Encoded": False
+    'isBase64Encoded': False
   }
 
 
@@ -50,15 +57,15 @@ def lambda_handler(event, context):
   report = "generic"
   if operation == 'GET':
     payload=None
-    if('queryStringParameters' in event):
-      payload = event['queryStringParameters']
+    if('querystring' in event['params']):
+      payload = event['params']['querystring']
     if (payload != None and payload != ""):
       if ('gene' in payload):
-        geneID = event["queryStringParameters"]['gene']
+        geneID = payload['gene']
       else:
         return respond(InputError('gene', 'Gene parameter is required'))
       if ('report' in payload):
-        report = event["queryStringParameters"]['report']
+        report = payload['report']
       report = {"payload": payload}
       genericReport(report)
       if (report == "SNP"):

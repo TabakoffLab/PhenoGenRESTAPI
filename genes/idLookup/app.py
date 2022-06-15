@@ -25,13 +25,21 @@ def getHelp(conn):
 
 
 def respond(err, res=None):
+  body = ""
+  if err:
+    if (res is not None):
+      body = {"message": err.message, "help": json.dumps(res)}
+    else:
+      body = {"message": err.message}
+  else:
+    body = json.dumps(res)
   return {
     'statusCode': '400' if err else '200',
-    'body': err.message if err else json.dumps(res),
+    'body': body,
     'headers': {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
-    "isBase64Encoded": False
+    'isBase64Encoded': False
   }
 
 
@@ -61,8 +69,8 @@ def lambda_handler(event, context):
     targetList = ''
     IDs = []
     payload=None
-    if('queryStringParameters' in event):
-      payload = event['queryStringParameters']
+    if('querystring' in event['params']):
+      payload = event['params']['querystring']
       
     if (payload != None):
       if ('gene' in payload):

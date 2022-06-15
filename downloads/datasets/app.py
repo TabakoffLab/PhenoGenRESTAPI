@@ -7,9 +7,17 @@ logger.setLevel(logging.INFO)
 selectDataset="select * from rna_dataset2"
 
 def respond(err, res=None):
+    body=""
+    if err :
+        if(res is not None):
+            body={"message":err.message,"help": json.dumps(res)}
+        else:
+            body = {"message": err.message }
+    else:
+        body=json.dumps(res)
     return {
         'statusCode': '400' if err else '200',
-        'body': err.message if err else json.dumps(res),
+        'body': body,
         'headers': {
             'Content-Type': 'application/json',
         },
@@ -104,10 +112,11 @@ def lambda_handler(event, context):
     if ('httpMethod' in event):
         operation = event['httpMethod']
     message = ""
+    
     if operation == 'GET':
         payload = None
-        if ('queryStringParameters' in event):
-            payload = event['queryStringParameters']
+        if ('querystring' in event['params']):
+            payload = event['params']['querystring']
         
         conn = MyDBConnection.ConnectDB()
         datasets=getDatasets(conn,payload)

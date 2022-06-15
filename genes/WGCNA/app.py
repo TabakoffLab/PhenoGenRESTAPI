@@ -5,12 +5,18 @@ logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
 
-
-
 def respond(err, res=None):
+  body = ""
+  if err:
+    if (res is not None):
+      body = {"message": err.message, "help": json.dumps(res)}
+    else:
+      body = {"message": err.message}
+  else:
+    body = json.dumps(res)
   return {
     'statusCode': '400' if err else '200',
-    'body': err.message if err else json.dumps(res),
+    'body': body,
     'headers': {
       'Content-Type': 'application/json',
     },
@@ -145,28 +151,28 @@ def lambda_handler(event, context):
   moduleID = ""
   moduleDatatype = ""
   payload=None
-  if('queryStringParameters' in event):
-    payload = event['queryStringParameters']
+  if('querystring' in event['params']):
+    payload = event['params']['querystring']
   
   if (payload != None):
     if ('gene' in payload):
-      geneID = event["queryStringParameters"]['gene']
+      geneID = payload['gene']
     if ('type' in payload):
-      dataType = event["queryStringParameters"]['type']
+      dataType = payload['type']
     if ('tissue' in payload):
-      tissue = event["queryStringParameters"]['tissue']
+      tissue = payload['tissue']
     if ('genomeVersion' in payload):
-      genomeVer = event["queryStringParameters"]['genomeVersion']
+      genomeVer = payload['genomeVersion']
     if ('version' in payload):
-      version = event["queryStringParameters"]['version']
+      version = payload['version']
     if ('moduleID' in payload):
-      moduleID = event["queryStringParameters"]['moduleID']
+      moduleID = payload['moduleID']
     if ('moduleName' in payload):
-      moduleName = event["queryStringParameters"]['moduleName']
+      moduleName = payload['moduleName']
     if ('wgcnaID' in payload):
-      wgcnaID = event["queryStringParameters"]['wgcnaID']
+      wgcnaID = payload['wgcnaID']
     if ('moduleDatatype' in payload):
-      moduleName = event["queryStringParameters"]['moduleDatatype']
+      moduleName = payload['moduleDatatype']
     
     # get WGCNA Modules
     conn = MyDBConnection.ConnectDB()

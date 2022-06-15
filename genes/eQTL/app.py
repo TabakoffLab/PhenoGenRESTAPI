@@ -7,13 +7,21 @@ logger.setLevel(logging.INFO)
 
 
 def respond(err, res=None):
+    body=""
+    if err :
+        if(res is not None):
+            body={"message":err.message,"help": json.dumps(res)}
+        else:
+            body = {"message": err.message }
+    else:
+        body=json.dumps(res)
     return {
         'statusCode': '400' if err else '200',
+        'body': body,
         'headers': {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
         },
-        'isBase64Encoded': False,
-        'body': err.message if err else json.dumps(res)
+        'isBase64Encoded': False
     }
 
 
@@ -62,21 +70,21 @@ def lambda_handler(event, context):
     dataVersion = ""
     version = ""
     payload=None
-    if('queryStringParameters' in event):
-        payload = event['queryStringParameters']
+    if('querystring' in event['params']):
+        payload = event['params']['querystring']
     idType = ""
     newTissues = "'Brain','Liver','Kidney'"
     print("start")
     if (payload != None and payload != ""):
         if ('type' in payload):
-            dataType = event["queryStringParameters"]['type']
+            dataType = payload['type']
             if (dataType == "array"):
                 tissues = "Brain,Heart,Liver,BAT"
                 tissueValidation = {"Brain": 1, "Liver": 1, "Heart": 1, "BAT": 1}
                 newTissues = "'Brain','Heart','Liver','Brown Adipose'"
         
         if ('gene' in payload):
-            geneID = event["queryStringParameters"]['gene']
+            geneID = payload['gene']
             if (geneID.startswith("PRN") or (
                     geneID.isdigit() and len(geneID) == 7 and (geneID.startswith("7") or geneID.startswith("6")))):
                 print("valid ID")
@@ -97,12 +105,12 @@ def lambda_handler(event, context):
                                       'Gene Required - ?gene=PhenogenID - PhenoGen geneID(seq) or Affymetrix Transcript ClusterID(array) required rest.phenogen.org/genes/idLookup provides appropriate id from other IDs.'))
         
         if ('cutoff' in payload):
-            cutoff = float(event["queryStringParameters"]['cutoff'])
+            cutoff = float(payload['cutoff'])
         
         if ('tissues' in payload):
-            tissues = event["queryStringParameters"]['tissues']
+            tissues = payload['tissues']
         if ('version' in payload):
-            version = event["queryStringParameters"]['version']
+            version = payload['version']
             if (geneID.find("RN6.") > 0):
                 tmp = geneID[geneID.find(".") + 1:][0]
                 print("version:" + tmp)
@@ -141,7 +149,7 @@ def lambda_handler(event, context):
                     TissueDS += ",'" + t + "'"
                     newTissues += ",'" + tmp + "'"
         if ('genomeVersion' in payload):
-            genomeVer = event["queryStringParameters"]['genomeVersion']
+            genomeVer = payload['genomeVersion']
 
         # sanity checks
         if (dataType == "seq"):
