@@ -29,7 +29,12 @@ def respond(err, res=None):
 
 def getHelp():
     response = {}
+    response['methods'] = "GET"
     response['parameters'] = {}
+    response['parameters']['datasetID'] = {
+        "description": "datasetID parameter - Required - ID of the dataset to retreive."}
+    response['parameters']['resultID'] = {
+        "description": "resultID parameter - Required - ID of the dataset to retreive."}
     return response
 
 
@@ -41,21 +46,10 @@ def formatResponse(message, result,resultFiles):
             "parameters": {
             
             },
-            "dataset": {
-                'ID': result['ID'],
-                'Organism': dataset['Organism'],
-                'Panel': dataset['Panel'],
-                'Description': dataset['Description'],
-                'Created': dataset['Created'],
-                'Tissue': dataset['Tissue'],
-                'SeqType': dataset['SeqType'],
-                'GenomeVer': dataset['GenomeVer'],
-                'metaData': meta,
-                'results': result
-            }
+            "datasetResult": result
         }
         if resultFiles is not None:
-            results['resultFiles'] = resultFiles
+            results['datasetResult']['resultFiles'] = resultFiles
     else:
         results = {
             "message": message,
@@ -66,39 +60,49 @@ def formatResponse(message, result,resultFiles):
 
 
 def getDatasetResult(conn, payload):
-    ds = {}
+    ds = None
     cursor = conn.cursor()
-    query = selectDataset + str(payload['datasetID'])
+    query = selectResults + str(payload['resultID'])
+    if('datasetID' in payload):
+        query=query+" and rna_dataset_id ="+str(payload['datasetID'])
     logger.info(query)
     cursor.execute(query)
     res = cursor.fetchone()
     if res is not None:
+        ds={}
         ds['ID'] = res[0]
-        ds['Organism'] = res[1]
-        ds['Panel'] = res[3]
-        ds['Description'] = res[4]
-        ds['Created'] = str(res[6])
-        ds['Tissue'] = res[8]
-        ds['SeqType'] = res[9]
-        ds['GenomeVer'] = res[10]
+        ds['type'] = res[2]
+        ds['genomeVersion'] = res[3]
+        ds['version'] = res[4]
+        ds['createdDate'] = str(res[5])
     cursor.close()
     return ds
 
 
 def getResultFiles(conn, payload):
-    results = []
+    results = None
     cursor = conn.cursor()
-    query = selectResults + str(payload['datasetID'])
+    query = selectResultFiles + str(payload['resultID'])
     logger.info(query)
     cursor.execute(query)
     res = cursor.fetchall()
+    if(len(res)>1):
+        results=[]
     for r in res:
         tmp = {}
-        tmp['ID'] = r[0]
-        tmp['type'] = r[2]
-        tmp['genomeVersion'] = r[3]
-        tmp['version'] = r[4]
-        tmp['createdDate'] = str(r[5])
+        tmp['fileID'] = r[0]
+        tmp['uploadDate'] = str(r[2])
+        tmp['fileName'] = r[3]
+        tmp['URL'] = "https://phenogen.org"+r[5]+r[4]
+        tmp['checksum'] = r[6]
+        tmp['genomeVersion'] = r[8]
+        tmp['description'] = r[9]
+        tmp['annotation'] = r[10]
+        tmp['level'] = r[11]
+        strainMeans=False
+        if(r[12]==1):
+            strainMeans=True
+        tmp['strainMeans'] = strainMeans
         results.append(tmp)
     cursor.close()
     return results
@@ -109,34 +113,38 @@ def lambda_handler(event, context):
     if ('httpMethod' in event):
         operation = event['httpMethod']
     message = ""
-    
     if operation == 'GET':
         payload = None
         result = None
         resultFiles = None
         dsrID = -1
+        dsID = -1
         conn = None
         if ('querystring' in event['params']):
             payload = event['params']['querystring']
         if ("resultID" in payload and int(payload['resultID']) > 0):
-            dsrID = payload['resultID']
-            conn = MyDBConnection.ConnectDB()
-            result = getDatasetResult(conn, payload)
+            if("datasetID" in payload and int(payload['datasetID']) > 0):
+                dsID= payload['datasetID']
+                dsrID = payload['resultID']
+                conn = MyDBConnection.ConnectDB()
+                result = getDatasetResult(conn, payload)
+            else:
+                return respond(None, getHelp())
         else:
-            return getResponse(None,getHelp())
+            return respond(None,getHelp())
         if (result is None):
-            message = "Dataset Result (id:" + str(dsrID) + ") not found."
-            return (message, {})
+            message = "Dataset(id:"+str(dsID)+") and Result (id:" + str(dsrID) + ") not found. Please double check that you have provided the correct IDs."
+            return respond(InputError('Parameters',message), getHelp())
         else:
             resultFiles = getResultFiles(conn, payload)
         if conn is not None:
             conn.close()
-        if dataset is not None:
+        if result is not None:
             response = formatResponse(message, result,resultFiles)
             return respond(None, response)
         else:
             return respond(None, {})
-        return respond(InputError('Parameters', 'required parameters missing'))
+        return respond(InputError('Parameters', 'required parameters missing'),getHelp())
     else:
         return respond(InputError('HTTPMethod', 'Unsupported method'))
 
