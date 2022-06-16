@@ -29,7 +29,10 @@ def respond(err, res=None):
 
 def getHelp():
     response = {}
+    response['methods'] = "GET"
     response['parameters'] = {}
+    response['parameters']['datasetID'] = {
+        "description": "datasetID parameter - Required - ID of the dataset to retreive."}
     return response
 
 def formatResponse(message,dataset,meta,result):
@@ -122,29 +125,30 @@ def lambda_handler(event, context):
         conn=None
         if ('querystring' in event['params']):
             payload = event['params']['querystring']
-        if("datasetID" in payload and int(payload['datasetID'])>0):
-            dsID=payload['datasetID']
-            conn = MyDBConnection.ConnectDB()
-            dataset = getDataset(conn, payload)
+        if 'help' in payload:
+            return respond(None,getHelp())
         else:
-            message="missing required parameter:datasetID"
-            return respond(InputError("MissingParameter",message),getHelp())
-        if(dataset is None):
-            message="Dataset (id:"+str(dsID)+") not found."
-            return(message,{})
-        else:
-            metaData=getMetaData(conn,payload)
-            results=getResultList(conn,payload)
-        if conn is not None:
-            conn.close()
-        if dataset is not None:
-            results=formatResponse(message,dataset,metaData,results)
-            return respond(None, results)
-        else:
-            return respond(None,{})
-        return respond(InputError('Parameters', 'required parameters missing'))
+            if("datasetID" in payload and int(payload['datasetID'])>0):
+                dsID=payload['datasetID']
+                conn = MyDBConnection.ConnectDB()
+                dataset = getDataset(conn, payload)
+            else:
+                message="missing required parameter:datasetID"
+                return respond(InputError("MissingParameter",message),getHelp())
+            if(dataset is None):
+                message="Dataset (id:"+str(dsID)+") not found."
+                return(message,{})
+            else:
+                metaData=getMetaData(conn,payload)
+                results=getResultList(conn,payload)
+            if conn is not None:
+                conn.close()
+            if dataset is not None:
+                results=formatResponse(message,dataset,metaData,results)
+                return respond(None, results)
+            return respond(InputError('Error', 'An error has occurred'))
     else:
-        return respond(InputError('HTTPMethod', 'Unsupported method'))
+        return respond(InputError('HTTPMethod', 'Unsupported method'),getHelp())
 
 
 class Error(Exception):

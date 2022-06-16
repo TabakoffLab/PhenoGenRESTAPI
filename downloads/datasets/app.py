@@ -27,8 +27,19 @@ def respond(err, res=None):
 
 def getHelp():
     response = {}
+    response['methods'] = "GET"
     response['parameters'] = {}
-    
+    response['parameters']['genomeVer'] = {
+        "description": "genomeVer parameter - Optional parameter to filter results to a specific genome version."}
+    response['parameters']['organism'] = {
+        "description": "organism parameter - Optional parameter to filter results to a specific organism", "options": ["Rn", "Mm"]
+    }
+    response['parameters']['panel'] = {
+        "description": "panel parameter - Optional parameter to filter results to a specific panel of animals."}
+    response['parameters']['type'] = {
+        "description": "type parameter - Optional parameter to filter results to a specific sequencing type.","options":["smallRNA","totalRNA"]}
+    response['parameters']['tissue'] = {
+        "description": "tissue parameter - Optional parameter to filter results to a specific tissue. Note: Please use Brain instead of 'Whole Brain'"}
     return response
 
 def formatResponse(message,datasets):
@@ -117,14 +128,16 @@ def lambda_handler(event, context):
         payload = None
         if ('querystring' in event['params']):
             payload = event['params']['querystring']
-        
-        conn = MyDBConnection.ConnectDB()
-        datasets=getDatasets(conn,payload)
-        conn.close()
-        results=formatResponse(message,datasets)
-        return respond(None, results)
+        if 'help' in payload:
+            return respond(None,getHelp())
+        else:
+            conn = MyDBConnection.ConnectDB()
+            datasets=getDatasets(conn,payload)
+            conn.close()
+            results=formatResponse(message,datasets)
+            return respond(None, results)
     else:
-        return respond(None)
+        return respond(InputError("HTTPMethod","Unsupported Method"),getHelp())
 
 
 class Error(Exception):
