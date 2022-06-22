@@ -41,7 +41,7 @@
                         "schema": {
                             "type": "string",
                             "format": "string",
-                            "default":"rn6"
+                            "default": "rn6"
                         }
                     },
                     {
@@ -92,7 +92,7 @@
                         "schema": {
                             "type": "string",
                             "format": "string",
-                            "default":""
+                            "default": ""
                         }
                     }
                 ],
@@ -122,7 +122,9 @@
             "get": {
                 "summary": "",
                 "operationId": "",
-                "tags": [""],
+                "tags": [
+                    ""
+                ],
                 "parameters": [],
                 "responses": {
                     "200": {
@@ -150,7 +152,9 @@
             "get": {
                 "summary": "",
                 "operationId": "",
-                "tags": [""],
+                "tags": [
+                    ""
+                ],
                 "parameters": [],
                 "responses": {
                     "200": {
@@ -178,7 +182,9 @@
             "get": {
                 "summary": "datasets - get a list of available datasets.",
                 "operationId": "datasets",
-                "tags": ["Datasets"],
+                "tags": [
+                    "dataset"
+                ],
                 "parameters": [
                     {
                         "name": "genomeVer",
@@ -188,7 +194,7 @@
                         "schema": {
                             "type": "string",
                             "format": "string",
-                            "default":""
+                            "default": ""
                         }
                     },
                     {
@@ -199,7 +205,7 @@
                         "schema": {
                             "type": "string",
                             "format": "string",
-                            "default":"Rn"
+                            "default": "Rn"
                         }
                     },
                     {
@@ -210,7 +216,7 @@
                         "schema": {
                             "type": "string",
                             "format": "string",
-                            "default":""
+                            "default": ""
                         }
                     },
                     {
@@ -221,7 +227,7 @@
                         "schema": {
                             "type": "string",
                             "format": "string",
-                            "default":""
+                            "default": ""
                         }
                     },
                     {
@@ -232,15 +238,14 @@
                         "schema": {
                             "type": "string",
                             "format": "string",
-                            "default":""
+                            "default": ""
                         }
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "",
-                        "headers": {
-                        },
+                        "headers": {},
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -256,7 +261,9 @@
             "get": {
                 "summary": "dataset - meta data, list of result files, processing steps for the dataset",
                 "operationId": "dataset",
-                "tags": ["dataset"],
+                "tags": [
+                    "dataset"
+                ],
                 "parameters": [
                     {
                         "name": "datasetID",
@@ -266,16 +273,14 @@
                         "schema": {
                             "type": "integer",
                             "format": "int32",
-                            "default":0
+                            "default": 0
                         }
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "",
-                        "headers": {
-
-                        },
+                        "headers": {},
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -291,7 +296,9 @@
             "get": {
                 "summary": "datasetFiles - get a list of files linked to the selected result id.",
                 "operationId": "datasetFiles",
-                "tags": ["dataset"],
+                "tags": [
+                    "dataset"
+                ],
                 "parameters": [
                     {
                         "name": "datasetID",
@@ -301,7 +308,7 @@
                         "schema": {
                             "type": "integer",
                             "format": "int32",
-                            "default":0
+                            "default": 0
                         }
                     },
                     {
@@ -312,20 +319,18 @@
                         "schema": {
                             "type": "integer",
                             "format": "int32",
-                            "default":0
+                            "default": 0
                         }
                     }
-                    ],
+                ],
                 "responses": {
                     "200": {
                         "description": "",
-                        "headers": {
-
-                        },
+                        "headers": {},
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/datasetFiles"
+                                    "$ref": "#/components/schemas/resultFiles"
                                 }
                             }
                         }
@@ -335,21 +340,12 @@
         },
         "/downloads/datasetFile": {
             "get": {
-                "summary": "datasetFile - get a link or contents of a dataset file.",
+                "summary": "Not Implemented Yet - datasetFile - get a link or contents of a dataset file.",
                 "operationId": "datasetFile",
-                "tags": ["dataset"],
+                "tags": [
+                    "dataset"
+                ],
                 "parameters": [
-                    {
-                        "name": "datasetID",
-                        "in": "query",
-                        "description": "Dataset ID to retreive the file list.",
-                        "required": true,
-                        "schema": {
-                            "type": "integer",
-                            "format": "int32",
-                            "default":0
-                        }
-                    },
                     {
                         "name": "resultID",
                         "in": "query",
@@ -358,18 +354,18 @@
                         "schema": {
                             "type": "integer",
                             "format": "int32",
-                            "default":0
+                            "default": 0
                         }
                     },
                     {
                         "name": "fileID",
                         "in": "query",
-                        "description": "Dataset ID to retreive the file list.",
+                        "description": "Result File ID to retreive the file.",
                         "required": true,
                         "schema": {
                             "type": "integer",
                             "format": "int32",
-                            "default":0
+                            "default": 0
                         }
                     },
                     {
@@ -378,39 +374,36 @@
                         "description": "Request specific response type",
                         "required": false,
                         "schema": {
-                            "type": "string"
+                            "type": "string",
+                            "default": "URL"
                         }
                     }
-                    ],
+                ],
                 "responses": {
                     "200": {
                         "description": "",
-                        "headers": {
-
-                        },
+                        "headers": {},
                         "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/datasetFile"
-                                }
-                            }
+                            
+                            
                         }
                     }
                 }
             }
         },
-        "/genes/eQTL":{
+        "/genes/eQTL": {
             "get": {
                 "summary": "",
                 "operationId": "",
-                "tags": [""],
+                "tags": [
+                    ""
+                ],
                 "parameters": [
-                     {
+                    {
                         "name": "gene",
                         "in": "query",
                         "description": "Gene parameter This should correspond to a PhenoGen ID or an Affy Transcript Cluster ID of the gene.",
                         "required": true,
-
                         "schema": {
                             "type": "string",
                             "format": "string"
@@ -420,7 +413,7 @@
                         "name": "type",
                         "in": "query",
                         "description": "Type parameter - This parameter specifies the data source to use [seq, array]. Default: seq",
-                        "example":"seq,array",
+                        "example": "seq,array",
                         "required": true,
                         "schema": {
                             "type": "string",
@@ -490,18 +483,19 @@
                 }
             }
         },
-        "/genes/gene":{
+        "/genes/gene": {
             "get": {
                 "summary": "",
                 "operationId": "",
-                "tags": [""],
+                "tags": [
+                    ""
+                ],
                 "parameters": [
                     {
                         "name": "gene",
                         "in": "query",
                         "description": "This parameter is required to pull up a gene report.  This should correspond to the ensembl ID or PhenoGen ID of the gene.",
                         "required": true,
-
                         "schema": {
                             "type": "string",
                             "format": "string"
@@ -511,7 +505,7 @@
                         "name": "report",
                         "in": "query",
                         "description": "This parameter specifies the type of report returned.  Options: [generic,snp,transcript]",
-                        "example":"seq,array",
+                        "example": "seq,array",
                         "required": true,
                         "schema": {
                             "type": "string",
@@ -541,11 +535,13 @@
                 }
             }
         },
-        "/genes/idLookup":{
+        "/genes/idLookup": {
             "get": {
                 "summary": "",
                 "operationId": "",
-                "tags": [""],
+                "tags": [
+                    ""
+                ],
                 "parameters": [
                     {
                         "name": "gene",
@@ -565,7 +561,7 @@
                         "schema": {
                             "type": "string",
                             "format": "string",
-                            "default":"Rn"
+                            "default": "Rn"
                         }
                     },
                     {
@@ -576,7 +572,7 @@
                         "schema": {
                             "type": "integer",
                             "format": "int32",
-                            "default":"1"
+                            "default": "1"
                         }
                     },
                     {
@@ -587,7 +583,7 @@
                         "schema": {
                             "type": "string",
                             "format": "string",
-                            "default":""
+                            "default": ""
                         }
                     }
                 ],
@@ -613,18 +609,18 @@
                 }
             }
         },
-        "/genes/WGCNA":{
+        "/genes/WGCNA": {
             "get": {
                 "summary": "",
                 "operationId": "",
-                "tags": [""],
+                "tags": [
+                    ""
+                ],
                 "parameters": [],
                 "responses": {
                     "200": {
                         "description": "",
-                        "headers": {
-
-                        },
+                        "headers": {},
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -640,119 +636,159 @@
     "components": {
         "schemas": {
             "datasets": {
+                "type": "array",
+                "items": {
+                    "$ref": "#/components/schemas/dataset"
+                }
+            },
+            "dataset": {
                 "type": "object",
                 "required": [
-                    "dataset_id",
+                    "datasetID",
                     "organism",
                     "panel",
                     "description",
                     "created",
                     "tissue",
-                    "seq_type"
+                    "seqType"
                 ],
                 "properties": {
-                    "dataset_id": {
+                    "datasetID": {
                         "type": "integer",
-                        "format": "int64"
+                        "format": "int64",
+                        "description": "Unique ID for the dataset."
                     },
                     "organism": {
-                        "type": "string"
+                        "type": "string",
+                        "description": "Organism for the dataset, Rn/Mm"
                     },
                     "panel": {
-                        "type": "string"
+                        "type": "string",
+                        "description": "Panel of animals. HRDP,HXB/BXH,LXS"
                     },
                     "description": {
-                        "type": "string"
+                        "type": "string",
+                        "description": "Dataset description"
                     },
-                    "date_created": {
-                        "type": "string"
-                    },
-                    "tissue": {
-                        "type": "string"
-                    },
-                    "sequenceing_type": {
-                        "type": "string"
-                    },
-                    "genome_version": {
-                        "type": "string"
-                    }
-                }
-            },
-            "dataset": {
-                "type":"object",
-                "properties":{
-                    "dataset_id": {
-                        "type": "integer",
-                        "format": "int64"
-                    },
-                    "organism": {
-                        "type": "string"
-                    },
-                    "panel": {
-                        "type": "string"
-                    },
-                    "description": {
-                        "type": "string"
-                    },
-                    "date_created": {
-                        "type": "string"
+                    "created": {
+                        "type": "string",
+                        "description": "Date dataset was created"
                     },
                     "tissue": {
-                        "type": "string"
+                        "type": "string",
+                        "description": "The tissue the data is from. Whole Brain, Liver, Heart, Kidney"
                     },
-                    "sequenceing_type": {
-                        "type": "string"
+                    "seqType": {
+                        "type": "string",
+                        "description": "The type of sequencing used for the dataset.  Generally smallRNA or totalRNA.  Small RNA is primarily miRNAs.  totalRNA is ribosome depleted TotalRNA."
                     },
-                    "genome_version": {
-                        "type": "string"
+                    "genomeVer": {
+                        "type": "string",
+                        "description": "Genome version- rn6 or mm10.  rn7 will be available soon."
                     },
-                    "metaData":{
-                        "type":"array",
-                        "items":{
-                            "type":"object",
-                            "properties": {
-                                "pipelines":{"type":"array","items":{}},
-                                "samples":{"type":"array","items":{}},
-                                "protocols":{"type":"array","items":{}}
-                            }
+                    "metaData": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/datasetMetaData"
                         }
                     },
-                    "results":{
-                        "type":"array",
-                        "items":{
-                            "type":"object",
-                            "properties": {
-                                "resultID":{"type":"integer","format": "int32"},
-                                "resultType":{"type":"string"},
-                                "genomeVersion":{"type":"string"},
-                                "hrdpVersion":{"type":"integer","format": "int"},
-                                "dateCreated":{"type":"string"}
-                            }
+                    "results": {
+                        "type": "array",
+                        "description": "A list of results linked to the dataset.  Results are groups of related files.  For example a result might contain Gene and transcript level data based on Ensembl annotation as well as files for individual samples and strain means for those levels.",
+                        "items": {
+                            "$ref":"#/components/schemas/datasetResult"
                         }
                     }
                 }
             },
-            "datasetFiles":{
+            "resultFiles":{
                 "type":"array",
                 "items":{
-                    "$ref": "#/components/schemas/datasetFile"
+                    "$ref":"#/components/schemas/resultFile"
                 }
             },
-            "datasetFile":{
-                "type":"object",
+            "resultFile": {
+                "type": "object",
+                "description": "File level data with the URL to directly download the file.",
                 "properties": {
-                    "fileID":{"type":"integer","format":"int32"},
-                    "uploadedDate":{"type":"string"},
-                    "fileName":{"type":"string"},
-                    "URL":{"type":"string"},
-                    "checksum":{"type":"string"},
-                    "genomeVersion":{"type":"string"},
-                    "description":{"type":"string"},
-                    "annotation":{"type":"string"},
-                    "level":{"type":"string"},
-                    "strainMeans":{"type":"boolean"}
+                    "fileID": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "uploadedDate": {
+                        "type": "string"
+                    },
+                    "fileName": {
+                        "type": "string"
+                    },
+                    "URL": {
+                        "type": "string"
+                    },
+                    "checksum": {
+                        "type": "string"
+                    },
+                    "genomeVersion": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "annotation": {
+                        "type": "string"
+                    },
+                    "level": {
+                        "type": "string"
+                    },
+                    "strainMeans": {
+                        "type": "boolean"
+                    }
                 }
-
+            },
+            "datasetResult": {
+                "type": "object",
+                "description": "Information for a specific result and then a list of files linked to that result.",
+                "properties": {
+                    "resultID": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "type": {
+                        "type": "string"
+                    },
+                    "genomeVersion": {
+                        "type": "string"
+                    },
+                    "hrdpVersion": {
+                        "type": "integer",
+                        "format": "int"
+                    },
+                    "dateCreated": {
+                        "type": "string"
+                    },
+                    "resultFiles":{
+                        "type":"array",
+                        "items":{
+                            "$ref":"#/components/schemas/resultFile"
+                        }
+                    }
+                }
+            },
+            "datasetMetaData": {
+                "type": "object",
+                "properties": {
+                    "pipelines": {
+                        "type": "array",
+                        "items": {}
+                    },
+                    "samples": {
+                        "type": "array",
+                        "items": {}
+                    },
+                    "protocols": {
+                        "type": "array",
+                        "items": {}
+                    }
+                }
             },
             "TrackData": {
                 "type": "object",
@@ -791,5 +827,4 @@
             }
         }
     }
-
 }
