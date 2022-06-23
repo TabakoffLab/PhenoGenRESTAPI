@@ -32,19 +32,19 @@ def getHelp():
     response['methods'] = "GET"
     response['parameters'] = {}
     response['parameters']['datasetID'] = {
-        "description": "datasetID parameter - Required - ID of the dataset to retreive."}
+        "description": "datasetID parameter - Required - ID of the dataset to retrieve."}
     return response
 
 def formatResponse(message,dataset,meta,result):
     results={}
-    if dataset is not None:
+    if dataset is not None and 'datasetID' in dataset:
         results = {
             "message": message,
             "parameters": {
             
             },
             "dataset":{
-                'ID':dataset['ID'],
+                'ID':dataset['datasetID'],
                 'Organism':dataset['Organism'],
                 'Panel': dataset['Panel'],
                 'Description': dataset['Description'],
@@ -59,6 +59,7 @@ def formatResponse(message,dataset,meta,result):
         if result is not None:
             results['results']=result
     else:
+        message="No Dataset Found: "+message
         results = {
             "message": message,
             "parameters": {},
@@ -74,7 +75,7 @@ def getDataset(conn,payload):
     cursor.execute(query)
     res = cursor.fetchone()
     if res is not None:
-        ds['ID']=res[0]
+        ds['datasetID']=res[0]
         ds['Organism']=res[1]
         ds['Panel']=res[3]
         ds['Description']=res[4]
@@ -101,11 +102,11 @@ def getResultList(conn, payload):
     res = cursor.fetchall()
     for r in res:
         tmp={}
-        tmp['ID'] = r[0]
+        tmp['resultID'] = r[0]
         tmp['type'] = r[2]
         tmp['genomeVersion']=r[3]
-        tmp['version'] = r[4]
-        tmp['createdDate'] = str(r[5])
+        tmp['hrdpVersion'] = r[4]
+        tmp['dateCreated'] = str(r[5])
         results.append(tmp)
     cursor.close()
     return results
@@ -137,7 +138,7 @@ def lambda_handler(event, context):
                 return respond(InputError("MissingParameter",message),getHelp())
             if(dataset is None):
                 message="Dataset (id:"+str(dsID)+") not found."
-                return(message,{})
+                return(message,getHelp())
             else:
                 metaData=getMetaData(conn,payload)
                 results=getResultList(conn,payload)
