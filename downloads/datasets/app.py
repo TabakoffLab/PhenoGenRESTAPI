@@ -14,7 +14,7 @@ def respond(err, res=None):
         else:
             body = {"message": err.message }
     else:
-        body=json.dumps(res)
+        body=res #json.dumps(res)
     return {
         'statusCode': '400' if err else '200',
         'body': body,
@@ -105,12 +105,12 @@ def getDatasets(conn,payload):
     while (len(res)):
         for r in res:
             tmp={}
-            tmp['ID']=r[0]
-            tmp['Organism']=r[1]
-            tmp['Panel']=r[3]
-            tmp['Description']=r[4]
-            tmp['Created']=str(r[6])
-            tmp['Tissue']=r[8]
+            tmp['datasetID']=r[0]
+            tmp['organism']=r[1]
+            tmp['panel']=r[3]
+            tmp['description']=r[4]
+            tmp['created']=str(r[6])
+            tmp['tissue']=r[8]
             tmp['SeqType']=r[9]
             tmp['GenomeVer']=r[10]
             ds.append(tmp)

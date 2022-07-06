@@ -13,7 +13,7 @@ def respond(err, res=None):
     else:
       body = {"message": err.message}
   else:
-    body = json.dumps(res)
+    body = res #json.dumps(res)
   return {
     'statusCode': '400' if err else '200',
     'body': body,
@@ -153,6 +153,8 @@ def lambda_handler(event, context):
   payload=None
   if('querystring' in event['params']):
     payload = event['params']['querystring']
+  if 'help' in payload:
+    return respond(None,getHelp())
   
   if (payload != None):
     if ('gene' in payload):
