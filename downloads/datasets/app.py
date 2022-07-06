@@ -14,7 +14,7 @@ def respond(err, res=None):
         else:
             body = {"message": err.message }
     else:
-        body=json.dumps(res)
+        body=res #json.dumps(res)
     return {
         'statusCode': '400' if err else '200',
         'body': body,

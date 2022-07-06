@@ -6,7 +6,14 @@ logger.setLevel(logging.INFO)
 
 selectDataset="SELECT * FROM rna_dataset2 where rna_dataset_id="
 selectResults="SELECT * FROM rna_dataset_results where rna_dataset_id="
-selectMeta="SELECT * FROM rna_dataset_results where rna_dataset_id="
+selectMetaPipeline="SELECT * FROM rna_p2dr where rna_dataset_result_id in (select rna_dataset_result_id from rna_dataset_results where rna_dataset_id="
+selectMetaPipeline2="SELECT * FROM rna_pipeline where rna_pipeline_id in ("
+selectMetaPipeline3="SELECT * FROM rna_pipeline_steps where rna_pipeline_id in ("
+
+selectMetaSample="Select * from rna_ds_samples where rna_dataset_id="
+selectMetaProtocol="select * from rna_ds_protocols where rna_sample_id in (select rna_sample_id from rna_ds_samples where rna_dataset_id="
+
+
 
 def respond(err, res=None):
     body=""
@@ -16,7 +23,7 @@ def respond(err, res=None):
         else:
             body = {"message": err.message }
     else:
-        body=json.dumps(res)
+        body=res #json.dumps(res)
     return {
         'statusCode': '400' if err else '200',
         'body': body,
@@ -88,8 +95,72 @@ def getDataset(conn,payload):
 
 def getMetaData(conn,payload):
     meta={}
-    #cursor = conn.cursor()
-    #cursor.close()
+    cursor = conn.cursor()
+    query=selectMetaPipeline+str(payload['datasetID'])+")"
+    print(query)
+    cursor.execute(query)
+    results=cursor.fetchall()
+    pipelineIDs={}
+    for r in results:
+        if(not r[0] in pipelineIDs):
+            pipelineIDs[r[0]]="1"
+    plStr=""
+    pipelines={}
+    for id in pipelineIDs:
+        plStr=plStr+","+str(id)
+    if(len(plStr)>1):
+        plStr = plStr[1:]
+        query2=selectMetaPipeline2+plStr+")"
+        cursor.execute(query2)
+        results2=cursor.fetchall()
+        for res in results2:
+            pipeline={}
+            pipeline['pipelineID']=res[0]
+            pipeline['title']=res[1]
+            pipeline['description']=res[2]
+            pipeline['steps']=[]
+            pipelines[str(res[0])]=pipeline
+            
+        query3 = selectMetaPipeline3 + plStr + ")"
+        cursor.execute(query3)
+        results3=cursor.fetchall()
+        for res in results3:
+            pipelineStep = {}
+            pipelineStep['name'] = res[2]
+            pipelineStep['stepType'] = res[3]
+            pipelineStep['order'] = res[4]
+            pipelineStep['scriptFile'] = res[5]
+            pipelineStep['program'] = res[6]
+            pipelineStep['programVersion'] = res[7]
+            pipelineStep['commandLine'] = res[8]
+            pipelineStep['startReadCount'] = res[9]
+            pipelineStep['endReadCount'] = res[10]
+            pipelineStep['programURL'] = res[12]
+            pipelines[str(res[1])]['steps'].append(pipelineStep)
+    pipelineList=[]
+    for p in pipelines:
+        pipelineList.append(pipelines[p])
+    meta['pipelines'] = pipelineList
+    sampleList=[]
+    cursor.execute(selectMetaSample+str(payload['datasetID']))
+    results4 = cursor.fetchall()
+    for res in results4:
+        sample={}
+        sample['sampleName']=res[2]
+        sample['strain'] = res[3]
+        sample['age'] = res[4]
+        sample['sex'] = res[5]
+        sample['tissue'] = res[6]
+        sample['source'] = res[7]
+        sample['sourceDate'] = res[8]
+        sample['soureType'] = res[9]
+        sample['breedingDetails'] = res[10]
+        sample['genotype'] = res[11]
+        sample['misc'] = res[12]
+        sample['disease'] = res[13]
+        sampleList.append(sample)
+    meta['samples']=sampleList
+    cursor.close()
     return meta
 
 

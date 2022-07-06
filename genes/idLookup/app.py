@@ -21,6 +21,7 @@ def getHelp(conn):
   response['parameters']['targetList'] = {
     "description": "targetList parameter - This parameter specifies ID Types of interest and limits results to IDs of the specified type(s).  Comma seperated list of target IDs.",
     "options": newList, "default": "No Target Filter"}
+  conn.close()
   return response
 
 
@@ -32,7 +33,7 @@ def respond(err, res=None):
     else:
       body = {"message": err.message}
   else:
-    body = json.dumps(res)
+    body = res #json.dumps(res)
   return {
     'statusCode': '400' if err else '200',
     'body': body,
@@ -72,6 +73,9 @@ def lambda_handler(event, context):
     if('querystring' in event['params']):
       payload = event['params']['querystring']
       
+    if 'help' in payload:
+      return respond(None, getHelp(conn))
+    
     if (payload != None):
       if ('gene' in payload):
         
