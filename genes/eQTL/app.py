@@ -14,7 +14,7 @@ def respond(err, res=None):
         else:
             body = {"message": err.message }
     else:
-        body=json.dumps(res)
+        body=res #json.dumps(res)
     return {
         'statusCode': '400' if err else '200',
         'body': body,
@@ -172,9 +172,9 @@ def lambda_handler(event, context):
         eQTLList = []
         datasets = {}
         tissueVersions = {}
-        
+        conn = MyDBConnection.ConnectDB()
         ## Lookup LSE(locus_specifice_eqtl2) probe_id(gene name)
-        cursorLookup = conn.cursor()
+        #cursorLookup = conn.cursor()
         dsQuery = "select rna_dataset_id,tissue,build_version from rna_dataset where strain_panel='BNLX/SHRH' and genome_id='" + genomeVer + "' and tissue in (" + TissueDS + ") and trx_recon=1 and visible=1 "
         if (version == ""):
             dsQuery = dsQuery + " order by build_version DESC"
