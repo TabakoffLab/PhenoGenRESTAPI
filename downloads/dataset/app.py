@@ -10,8 +10,11 @@ selectMetaPipeline="SELECT * FROM rna_p2dr where rna_dataset_result_id in (selec
 selectMetaPipeline2="SELECT * FROM rna_pipeline where rna_pipeline_id in ("
 selectMetaPipeline3="SELECT * FROM rna_pipeline_steps where rna_pipeline_id in ("
 
-selectMetaSample="Select * from rna_ds_samples where rna_dataset_id="
-selectMetaProtocol="select * from rna_ds_protocols where rna_sample_id in (select rna_sample_id from rna_ds_samples where rna_dataset_id="
+selectMetaSample = "Select * from rna_ds_samples where rna_dataset_id="
+selectMetaProtocol = "SELECT rp.RNA_PROTOCOL_ID,rp.title,rp.DESCRIPTION,rp.version,rpt.protocol_type,rp.filename,rp.PATH "+ \
+    "FROM inia_prod.rna_protocols rp left outer join rna_protocol_type rpt on rpt.RNA_PROTOCOL_TYPE_ID=rp.RNA_PROTOCOL_TYPE_ID "+ \
+    "where rna_protocol_id in (select RNA_PROTOCOL_ID from rna_ds_protocols where rna_sample_id in "+ \
+    "(select rna_sample_id from rna_ds_samples where rna_dataset_id="
 
 
 
@@ -160,6 +163,23 @@ def getMetaData(conn,payload):
         sample['disease'] = res[13]
         sampleList.append(sample)
     meta['samples']=sampleList
+
+    protocolList = []
+    cursor.execute(selectMetaProtocol + str(payload['datasetID'])+"))")
+    results5 = cursor.fetchall()
+    for res in results5:
+        protocol = {}
+        protocol['protocolID'] = res[0]
+        protocol['title'] = res[1]
+        protocol['description'] = res[2]
+        protocol['version'] = res[3]
+        protocol['protocolType'] = res[4]
+        url=""
+        if(not res[5] is None and not res[6] is None):
+            url="https://phenogen.org"+res[6]+"/"+res[5]
+        protocol['URL'] = url
+        protocolList.append(protocol)
+    meta['protocols'] = protocolList
     cursor.close()
     return meta
 
