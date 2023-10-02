@@ -1,0 +1,975 @@
+{
+	"info": {
+		"_postman_id": "86eb61bc-4024-4f4e-adf2-321cc981b58c",
+		"name": "0.0.1beta2",
+		"description": "# PhenoGen REST API\n\nWe are building a REST API to provide access to all public data. Eventually this will also  \ninclude running most functions available through the website. Keep checking back for new functions.\n\n## Domains for Function Calls:\n\nFunctions can be called at either:  \n[https://rest.phenogen.org](https://rest.phenogen.org)  \nor  \n[https://rest-test.phenogen.org](https://rest-test.phenogen.org)  \nPlease note this is a development and testing version of the API. Please do not use this  \nfor actual data analysis. Only for development.\n\n## Help\n\n[https://rest-doc.phenogen.org](https://rest-doc.phenogen.org) - temporarily unavailable (as of 6/17/22), but will be available within a  \nfew days  \nAll functions should include help as a response if you call the function with this appended to the  \nend `?help=Y`. The response returns a JSON object with supported methods and then list of parameters  \nand description of each parameter as well as a list of options if there is a defined list of values.\n\n## R Methods for the API\n\nWe are developing methods to call the REST API from R and to retrieve the data directly from PhenoGen into  \nR. For now this is limited to the datasets at [https://phenogen.org/web/sysbio/resources.jsp](https://phenogen.org/web/sysbio/resources.jsp) -> New RNA  \nSequencing Datasets Experimental Details/Downloads  \nWe will turn this into an R package and release it.  \nGitHub Repository -  \n[https://github.com/TabakoffLab/PhenoGenRESTR](https://github.com/TabakoffLab/PhenoGenRESTR)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "genome Browser",
+			"item": [
+				{
+					"name": "trackData - get gene/region data.",
+					"id": "6454469b-d6b9-4e51-b631-bd114898b6d3",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/genomeBrowser/trackData?trackID=occaecat in pariatur &genomeVer=rn6&chromosome=occaecat in pariatur &minCoord=-24368817&maxCoord=-24368817&binSize=-24368817&version=",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"genomeBrowser",
+								"trackData"
+							],
+							"query": [
+								{
+									"key": "trackID",
+									"value": "occaecat in pariatur ",
+									"description": "(Required) ID of the track"
+								},
+								{
+									"key": "genomeVer",
+									"value": "rn6",
+									"description": "Genome Version"
+								},
+								{
+									"key": "chromosome",
+									"value": "occaecat in pariatur ",
+									"description": "(Required) Chromosome Location"
+								},
+								{
+									"key": "minCoord",
+									"value": "-24368817",
+									"description": "(Required) Minimum coordinate"
+								},
+								{
+									"key": "maxCoord",
+									"value": "-24368817",
+									"description": "(Required) Maximum coordinate"
+								},
+								{
+									"key": "binSize",
+									"value": "-24368817",
+									"description": "Bin Size for binned data"
+								},
+								{
+									"key": "version",
+									"value": "",
+									"description": "Data Version(optional) - allows you to select previous versions of data otherwise the most recent version is used."
+								}
+							]
+						},
+						"description": "Get data for a specific browser track from a specific region or for a gene."
+					},
+					"response": [
+						{
+							"id": "dea2717c-792e-4e88-8fc0-07ae19d96dfe",
+							"name": "JSON track data",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/genomeBrowser/trackData?trackID=<string>&genomeVer=rn6&chromosome=<string>&minCoord=<integer>&maxCoord=<integer>&binSize=<integer>&version=",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"genomeBrowser",
+										"trackData"
+									],
+									"query": [
+										{
+											"key": "trackID",
+											"value": "<string>"
+										},
+										{
+											"key": "genomeVer",
+											"value": "rn6"
+										},
+										{
+											"key": "chromosome",
+											"value": "<string>"
+										},
+										{
+											"key": "minCoord",
+											"value": "<integer>"
+										},
+										{
+											"key": "maxCoord",
+											"value": "<integer>"
+										},
+										{
+											"key": "binSize",
+											"value": "<integer>"
+										},
+										{
+											"key": "version",
+											"value": ""
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"disabled": false,
+									"description": "A link to the next page of responses",
+									"key": "x-next",
+									"value": "<string>"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"responseTime": null,
+							"body": "{\n  \"id\": \"<long>\",\n  \"name\": \"<string>\",\n  \"tag\": \"<string>\"\n}"
+						}
+					]
+				},
+				{
+					"name": "/genomeBrowser/views",
+					"id": "d5648e27-4f52-4a8f-a909-3329c32c3ec3",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/genomeBrowser/views",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"genomeBrowser",
+								"views"
+							]
+						}
+					},
+					"response": [
+						{
+							"id": "18231e35-dd57-49ff-9d89-b0b36b69a616",
+							"name": "response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/genomeBrowser/views",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"genomeBrowser",
+										"views"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"disabled": false,
+									"description": "A link to the next page of responses",
+									"key": "x-next",
+									"value": "<string>"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"responseTime": null,
+							"body": "{\n  \"id\": \"<long>\",\n  \"name\": \"<string>\",\n  \"tag\": \"<string>\"\n}"
+						}
+					]
+				},
+				{
+					"name": "/genomeBrowser/tracks",
+					"id": "8c426009-d87a-4d97-9658-098c2861866e",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/genomeBrowser/tracks",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"genomeBrowser",
+								"tracks"
+							]
+						}
+					},
+					"response": [
+						{
+							"id": "8c3e2701-cc17-402c-97d3-67e1741d967b",
+							"name": "response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/genomeBrowser/tracks",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"genomeBrowser",
+										"tracks"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"disabled": false,
+									"description": "A link to the next page of responses",
+									"key": "x-next",
+									"value": "<string>"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"responseTime": null,
+							"body": "{\n  \"id\": \"<long>\",\n  \"name\": \"<string>\",\n  \"tag\": \"<string>\"\n}"
+						}
+					]
+				}
+			],
+			"id": "712683d5-77c5-4503-980d-8389abb2cbf2"
+		},
+		{
+			"name": "downloads",
+			"item": [
+				{
+					"name": "datasets - get a list of available datasets.",
+					"id": "3821a462-1e9c-4320-8f91-1a1176bb09db",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/downloads/datasets?genomeVer=&organism=Rn&tissue=&panel=&type=",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"downloads",
+								"datasets"
+							],
+							"query": [
+								{
+									"key": "genomeVer",
+									"value": "",
+									"description": "Genome Version - rn6,rn5,mm10"
+								},
+								{
+									"key": "organism",
+									"value": "Rn",
+									"description": "Organism - Rn,Mm"
+								},
+								{
+									"key": "tissue",
+									"value": "",
+									"description": "tissue"
+								},
+								{
+									"key": "panel",
+									"value": "",
+									"description": "Animal Panel - HRDP,LXS,BXH/HXB"
+								},
+								{
+									"key": "type",
+									"value": "",
+									"description": "Seqeuncing Type - totalRNA,smallRNA"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"id": "59d462a1-1222-44fc-b4d2-3aca3c501f25",
+							"name": "response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/downloads/datasets?genomeVer=&organism=Rn&tissue=&panel=&type=",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"downloads",
+										"datasets"
+									],
+									"query": [
+										{
+											"key": "genomeVer",
+											"value": ""
+										},
+										{
+											"key": "organism",
+											"value": "Rn"
+										},
+										{
+											"key": "tissue",
+											"value": ""
+										},
+										{
+											"key": "panel",
+											"value": ""
+										},
+										{
+											"key": "type",
+											"value": ""
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"responseTime": null,
+							"body": "[\n  {\n    \"datasetID\": \"<long>\",\n    \"organism\": \"<string>\",\n    \"panel\": \"<string>\",\n    \"description\": \"<string>\",\n    \"created\": \"<string>\",\n    \"tissue\": \"<string>\",\n    \"seqType\": \"<string>\",\n    \"genomeVer\": \"<string>\",\n    \"results\": [\n      {\n        \"resultID\": \"<integer>\",\n        \"type\": \"<string>\",\n        \"genomeVersion\": \"<string>\",\n        \"hrdpVersion\": \"<int>\",\n        \"dateCreated\": \"<string>\",\n        \"resultFiles\": [\n          {\n            \"fileID\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"uploadedDate\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"fileName\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"URL\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"checksum\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"genomeVersion\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"description\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"annotation\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"level\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"strainMeans\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"fileID\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"uploadedDate\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"fileName\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"URL\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"checksum\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"genomeVersion\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"description\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"annotation\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"level\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"strainMeans\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      },\n      {\n        \"resultID\": \"<integer>\",\n        \"type\": \"<string>\",\n        \"genomeVersion\": \"<string>\",\n        \"hrdpVersion\": \"<int>\",\n        \"dateCreated\": \"<string>\",\n        \"resultFiles\": [\n          {\n            \"fileID\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"uploadedDate\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"fileName\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"URL\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"checksum\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"genomeVersion\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"description\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"annotation\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"level\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"strainMeans\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"fileID\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"uploadedDate\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"fileName\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"URL\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"checksum\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"genomeVersion\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"description\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"annotation\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"level\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"strainMeans\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      }\n    ]\n  },\n  {\n    \"datasetID\": \"<long>\",\n    \"organism\": \"<string>\",\n    \"panel\": \"<string>\",\n    \"description\": \"<string>\",\n    \"created\": \"<string>\",\n    \"tissue\": \"<string>\",\n    \"seqType\": \"<string>\",\n    \"genomeVer\": \"<string>\",\n    \"results\": [\n      {\n        \"resultID\": \"<integer>\",\n        \"type\": \"<string>\",\n        \"genomeVersion\": \"<string>\",\n        \"hrdpVersion\": \"<int>\",\n        \"dateCreated\": \"<string>\",\n        \"resultFiles\": [\n          {\n            \"fileID\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"uploadedDate\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"fileName\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"URL\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"checksum\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"genomeVersion\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"description\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"annotation\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"level\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"strainMeans\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"fileID\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"uploadedDate\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"fileName\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"URL\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"checksum\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"genomeVersion\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"description\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"annotation\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"level\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"strainMeans\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      },\n      {\n        \"resultID\": \"<integer>\",\n        \"type\": \"<string>\",\n        \"genomeVersion\": \"<string>\",\n        \"hrdpVersion\": \"<int>\",\n        \"dateCreated\": \"<string>\",\n        \"resultFiles\": [\n          {\n            \"fileID\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"uploadedDate\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"fileName\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"URL\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"checksum\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"genomeVersion\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"description\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"annotation\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"level\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"strainMeans\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"fileID\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"uploadedDate\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"fileName\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"URL\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"checksum\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"genomeVersion\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"description\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"annotation\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"level\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"strainMeans\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      }\n    ]\n  }\n]"
+						}
+					]
+				},
+				{
+					"name": "dataset - meta data, list of result files, processing steps for the dataset",
+					"id": "60770395-7acc-4cfd-a17a-c0cd0ea44c5d",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/downloads/dataset?datasetID=0",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"downloads",
+								"dataset"
+							],
+							"query": [
+								{
+									"key": "datasetID",
+									"value": "0",
+									"description": "(Required) Dataset ID to retreive data for."
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"id": "09f6e307-65ee-454f-b129-86728363bc01",
+							"name": "response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/downloads/dataset?datasetID=0",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"downloads",
+										"dataset"
+									],
+									"query": [
+										{
+											"key": "datasetID",
+											"value": "0"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"responseTime": null,
+							"body": "{\n  \"datasetID\": \"<long>\",\n  \"organism\": \"<string>\",\n  \"panel\": \"<string>\",\n  \"description\": \"<string>\",\n  \"created\": \"<string>\",\n  \"tissue\": \"<string>\",\n  \"seqType\": \"<string>\",\n  \"genomeVer\": \"<string>\",\n  \"results\": [\n    {\n      \"resultID\": \"<integer>\",\n      \"type\": \"<string>\",\n      \"genomeVersion\": \"<string>\",\n      \"hrdpVersion\": \"<int>\",\n      \"dateCreated\": \"<string>\",\n      \"resultFiles\": [\n        {\n          \"fileID\": \"<integer>\",\n          \"uploadedDate\": \"<string>\",\n          \"fileName\": \"<string>\",\n          \"URL\": \"<string>\",\n          \"checksum\": \"<string>\",\n          \"genomeVersion\": \"<string>\",\n          \"description\": \"<string>\",\n          \"annotation\": \"<string>\",\n          \"level\": \"<string>\",\n          \"strainMeans\": \"<boolean>\"\n        },\n        {\n          \"fileID\": \"<integer>\",\n          \"uploadedDate\": \"<string>\",\n          \"fileName\": \"<string>\",\n          \"URL\": \"<string>\",\n          \"checksum\": \"<string>\",\n          \"genomeVersion\": \"<string>\",\n          \"description\": \"<string>\",\n          \"annotation\": \"<string>\",\n          \"level\": \"<string>\",\n          \"strainMeans\": \"<boolean>\"\n        }\n      ]\n    },\n    {\n      \"resultID\": \"<integer>\",\n      \"type\": \"<string>\",\n      \"genomeVersion\": \"<string>\",\n      \"hrdpVersion\": \"<int>\",\n      \"dateCreated\": \"<string>\",\n      \"resultFiles\": [\n        {\n          \"fileID\": \"<integer>\",\n          \"uploadedDate\": \"<string>\",\n          \"fileName\": \"<string>\",\n          \"URL\": \"<string>\",\n          \"checksum\": \"<string>\",\n          \"genomeVersion\": \"<string>\",\n          \"description\": \"<string>\",\n          \"annotation\": \"<string>\",\n          \"level\": \"<string>\",\n          \"strainMeans\": \"<boolean>\"\n        },\n        {\n          \"fileID\": \"<integer>\",\n          \"uploadedDate\": \"<string>\",\n          \"fileName\": \"<string>\",\n          \"URL\": \"<string>\",\n          \"checksum\": \"<string>\",\n          \"genomeVersion\": \"<string>\",\n          \"description\": \"<string>\",\n          \"annotation\": \"<string>\",\n          \"level\": \"<string>\",\n          \"strainMeans\": \"<boolean>\"\n        }\n      ]\n    }\n  ]\n}"
+						}
+					]
+				},
+				{
+					"name": "datasetFiles - get a list of files linked to the selected result id.",
+					"id": "db672451-ca80-4435-b02f-51dfa220472d",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/downloads/datasetFiles?datasetID=0&resultID=0",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"downloads",
+								"datasetFiles"
+							],
+							"query": [
+								{
+									"key": "datasetID",
+									"value": "0",
+									"description": "(Required) Dataset ID to retreive the file list."
+								},
+								{
+									"key": "resultID",
+									"value": "0",
+									"description": "(Required) Result ID to retreive the file list."
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"id": "ed904a66-c348-48f4-aba4-7e54406d0605",
+							"name": "response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/downloads/datasetFiles?datasetID=0&resultID=0",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"downloads",
+										"datasetFiles"
+									],
+									"query": [
+										{
+											"key": "datasetID",
+											"value": "0"
+										},
+										{
+											"key": "resultID",
+											"value": "0"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"responseTime": null,
+							"body": "[\n  {\n    \"fileID\": \"<integer>\",\n    \"uploadedDate\": \"<string>\",\n    \"fileName\": \"<string>\",\n    \"URL\": \"<string>\",\n    \"checksum\": \"<string>\",\n    \"genomeVersion\": \"<string>\",\n    \"description\": \"<string>\",\n    \"annotation\": \"<string>\",\n    \"level\": \"<string>\",\n    \"strainMeans\": \"<boolean>\"\n  },\n  {\n    \"fileID\": \"<integer>\",\n    \"uploadedDate\": \"<string>\",\n    \"fileName\": \"<string>\",\n    \"URL\": \"<string>\",\n    \"checksum\": \"<string>\",\n    \"genomeVersion\": \"<string>\",\n    \"description\": \"<string>\",\n    \"annotation\": \"<string>\",\n    \"level\": \"<string>\",\n    \"strainMeans\": \"<boolean>\"\n  }\n]"
+						}
+					]
+				},
+				{
+					"name": "Not Implemented Yet - datasetFile - get a link or contents of a dataset file.",
+					"id": "6c3d4eca-b4e6-4dcf-9ce3-ec5f01e8638e",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/downloads/datasetFile?resultID=0&fileID=0&responseType=URL",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"downloads",
+								"datasetFile"
+							],
+							"query": [
+								{
+									"key": "resultID",
+									"value": "0",
+									"description": "(Required) Result ID to retreive the file list."
+								},
+								{
+									"key": "fileID",
+									"value": "0",
+									"description": "(Required) Result File ID to retreive the file."
+								},
+								{
+									"key": "responseType",
+									"value": "URL",
+									"description": "Request specific response type"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"id": "e32cc184-7184-4c75-afef-36bee50b08af",
+							"name": "response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/downloads/datasetFile?resultID=0&fileID=0&responseType=URL",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"downloads",
+										"datasetFile"
+									],
+									"query": [
+										{
+											"key": "resultID",
+											"value": "0"
+										},
+										{
+											"key": "fileID",
+											"value": "0"
+										},
+										{
+											"key": "responseType",
+											"value": "URL"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "text",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "text/plain"
+								}
+							],
+							"cookie": [],
+							"responseTime": null,
+							"body": ""
+						}
+					]
+				}
+			],
+			"id": "3a46ef9e-78be-4d4b-8dc7-2b14c82ad9d9"
+		},
+		{
+			"name": "genes",
+			"item": [
+				{
+					"name": "/genes/eQTL",
+					"id": "b7ab80aa-54ff-4d63-b112-91aa3846ca6d",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/genes/eQTL?gene=occaecat in pariatur &type=seq,array&cutoff=occaecat in pariatur &tissues=occaecat in pariatur &genomeVersion=occaecat in pariatur &version=occaecat in pariatur ",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"genes",
+								"eQTL"
+							],
+							"query": [
+								{
+									"key": "gene",
+									"value": "occaecat in pariatur ",
+									"description": "(Required) Gene parameter This should correspond to a PhenoGen ID or an Affy Transcript Cluster ID of the gene."
+								},
+								{
+									"key": "type",
+									"value": "seq,array",
+									"description": "(Required) Type parameter - This parameter specifies the data source to use [seq, array]. Default: seq"
+								},
+								{
+									"key": "cutoff",
+									"value": "occaecat in pariatur ",
+									"description": "(Required) Cutoff parameter - This parameter specifies -log(Pvalue) cutoff to use the returned values must be >=cutoff. The default is 2.0."
+								},
+								{
+									"key": "tissues",
+									"value": "occaecat in pariatur ",
+									"description": "(Required) Tissues parameter - This parameter specifies tissues to retreive eQTLs for as a comma seperated list. Options depend on source type. For rat options are source:RNASeq: [Brain,Liver] source:Array:[Brain,Heart,Liver,BAT]."
+								},
+								{
+									"key": "genomeVersion",
+									"value": "occaecat in pariatur ",
+									"description": "(Required) GenomeVersion parameter - This parameter specifies genomeVersion to return results for. Currently supported versions [mm10,rn5,rn6]"
+								},
+								{
+									"key": "version",
+									"value": "occaecat in pariatur ",
+									"description": "(Required) Version parameter - This parameter specifies the rna_dataset version to use for the results.  This corresponds to the version of the HRDP dataset.  The default is the most recent version"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"id": "ccb9f595-8b27-4249-a4ee-7311309e7892",
+							"name": "response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/genes/eQTL?gene=<string>&type=<string>&cutoff=<string>&tissues=<string>&genomeVersion=<string>&version=<string>",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"genes",
+										"eQTL"
+									],
+									"query": [
+										{
+											"key": "gene",
+											"value": "<string>"
+										},
+										{
+											"key": "type",
+											"value": "<string>"
+										},
+										{
+											"key": "cutoff",
+											"value": "<string>"
+										},
+										{
+											"key": "tissues",
+											"value": "<string>"
+										},
+										{
+											"key": "genomeVersion",
+											"value": "<string>"
+										},
+										{
+											"key": "version",
+											"value": "<string>"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"disabled": false,
+									"description": "A link to the next page of responses",
+									"key": "x-next",
+									"value": "<string>"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"responseTime": null,
+							"body": "{\n  \"id\": \"<long>\",\n  \"name\": \"<string>\",\n  \"tag\": \"<string>\"\n}"
+						}
+					]
+				},
+				{
+					"name": "/genes/gene",
+					"id": "7a1edcc0-dbfa-4fd4-9dd8-c3b1c5de31d3",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/genes/gene?gene=occaecat in pariatur &report=seq,array",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"genes",
+								"gene"
+							],
+							"query": [
+								{
+									"key": "gene",
+									"value": "occaecat in pariatur ",
+									"description": "(Required) This parameter is required to pull up a gene report.  This should correspond to the ensembl ID or PhenoGen ID of the gene."
+								},
+								{
+									"key": "report",
+									"value": "seq,array",
+									"description": "(Required) This parameter specifies the type of report returned.  Options: [generic,snp,transcript]"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"id": "df8c1608-eb37-47aa-9739-e8f3bc4a6b15",
+							"name": "response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/genes/gene?gene=<string>&report=<string>",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"genes",
+										"gene"
+									],
+									"query": [
+										{
+											"key": "gene",
+											"value": "<string>"
+										},
+										{
+											"key": "report",
+											"value": "<string>"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"disabled": false,
+									"description": "A link to the next page of responses",
+									"key": "x-next",
+									"value": "<string>"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"responseTime": null,
+							"body": "{\n  \"id\": \"<long>\",\n  \"name\": \"<string>\",\n  \"tag\": \"<string>\"\n}"
+						}
+					]
+				},
+				{
+					"name": "/genes/idLookup",
+					"id": "1548a6d9-86fb-4e5d-be63-d799443111f7",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/genes/idLookup?gene=occaecat in pariatur &organism=Rn&level=1&targetList=",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"genes",
+								"idLookup"
+							],
+							"query": [
+								{
+									"key": "gene",
+									"value": "occaecat in pariatur ",
+									"description": "(Required) Any supported Gene ID"
+								},
+								{
+									"key": "organism",
+									"value": "Rn",
+									"description": "This parameter specifies the species to use to find the ID specified. [Rn,Mm,Hs] default: Rn"
+								},
+								{
+									"key": "level",
+									"value": "1",
+									"description": "The number of connections from the source to traverse to find matching IDs.  Lower levels will be more directly connected and help eliminate retreiving loosly connected IDs. If IDs expected to be returned aren't returned increaseing the level by 1-2 may help."
+								},
+								{
+									"key": "targetList",
+									"value": "",
+									"description": "This parameter specifies ID Types of interest and limits results to IDs of the specified type(s).  Comma seperated list of target IDs."
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"id": "25a33b6c-bcf9-4bc4-b88c-442f9b1b9b4e",
+							"name": "response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/genes/idLookup?gene=<string>&organism=Rn&level=1&targetList=",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"genes",
+										"idLookup"
+									],
+									"query": [
+										{
+											"key": "gene",
+											"value": "<string>"
+										},
+										{
+											"key": "organism",
+											"value": "Rn"
+										},
+										{
+											"key": "level",
+											"value": "1"
+										},
+										{
+											"key": "targetList",
+											"value": ""
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"disabled": false,
+									"description": "A link to the next page of responses",
+									"key": "x-next",
+									"value": "<string>"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"responseTime": null,
+							"body": "{\n  \"id\": \"<long>\",\n  \"name\": \"<string>\",\n  \"tag\": \"<string>\"\n}"
+						}
+					]
+				},
+				{
+					"name": "/genes/WGCNA",
+					"id": "62399af5-3599-4b6c-9560-c6c5751cb4c2",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/genes/WGCNA",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"genes",
+								"WGCNA"
+							]
+						}
+					},
+					"response": [
+						{
+							"id": "78a3b330-6d3e-45b1-8a6b-7b46a0bbd4a0",
+							"name": "response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/genes/WGCNA",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"genes",
+										"WGCNA"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"responseTime": null,
+							"body": "{\n  \"id\": \"<long>\",\n  \"name\": \"<string>\",\n  \"tag\": \"<string>\"\n}"
+						}
+					]
+				}
+			],
+			"id": "fd667c3e-596f-401e-b4e7-ad3abc4eec84"
+		}
+	],
+	"variable": [
+		{
+			"id": "c716f486-641d-4bd4-bdc7-c26be9c40479",
+			"key": "baseUrl",
+			"value": "https://rest.phenogen.org/",
+			"type": "string"
+		}
+	]
+}

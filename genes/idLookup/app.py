@@ -10,6 +10,7 @@ def getHelp(conn):
   for t in targetList:
     newList.append(str(t))
   response = {}
+  response['methods']="GET"
   response['parameters'] = {}
   response['parameters']['gene'] = {"description": "Gene parameter - Required - Any supported Gene ID"}
   response['parameters']['organism'] = {
@@ -17,7 +18,7 @@ def getHelp(conn):
     "options": ["Rn", "Mm", "Hs"], "default": "Rn"}
   response['parameters']['alevel'] = {
     "description": "alevel parameter - This parameter specifies the number of links between IDs to traverse.  Due to potential confusion between aliases of genes we recommend keeping this low(<=2) to minimize false positives.  However some combinations of IDs/Targets will require a higher value.",
-    "options": "integers 0-10", "default": 1}
+    "options": "integer 0-10", "default": 1}
   response['parameters']['targetList'] = {
     "description": "targetList parameter - This parameter specifies ID Types of interest and limits results to IDs of the specified type(s).  Comma seperated list of target IDs.",
     "options": newList, "default": "No Target Filter"}
@@ -33,7 +34,7 @@ def respond(err, res=None):
     else:
       body = {"message": err.message}
   else:
-    body = res #json.dumps(res)
+    body = res  # json.dumps(res)
   return {
     'statusCode': '400' if err else '200',
     'body': body,
@@ -42,7 +43,6 @@ def respond(err, res=None):
     },
     'isBase64Encoded': False
   }
-
 
 def getTargetValues(conn):
   ret = {}

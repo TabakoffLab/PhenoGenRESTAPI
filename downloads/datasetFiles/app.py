@@ -80,7 +80,7 @@ def getDatasetResult(conn, payload):
 
 
 def getResultFiles(conn, payload):
-    results = None
+    results = []
     cursor = conn.cursor()
     query = selectResultFiles + str(payload['resultID'])
     logger.info(query)
