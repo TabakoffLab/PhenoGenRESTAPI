@@ -1,36 +1,17 @@
-import os, json, pymysql, boto3, logging
-import MyDBConnection
+import os, json, pymysql, boto3
+import MyDBConnection, SharedUtilityFunctions
 
-logger = logging.getLogger()
-logger.setLevel(logging.INFO)
+logger=None
+functionPath="downloads/datasetFiles"
 
 selectResults = "SELECT * FROM rna_dataset_results where rna_dataset_result_id="
 selectResultFiles = "SELECT * FROM rna_dataset_results_files where rna_dataset_result_id="
 
 
-def respond(err, res=None):
-    body=""
-    if err :
-        if(res is not None):
-            body={"message":err.message,"help": json.dumps(res)}
-        else:
-            body = {"message": err.message }
-    else:
-        body=res #json.dumps(res)
-    return {
-        'statusCode': '400' if err else '200',
-        'body': body,
-        'headers': {
-            'Content-Type': 'application/json',
-        },
-        'isBase64Encoded': False
-    }
 
 
 def getHelp():
-    response = {}
-    response['methods'] = "GET"
-    response['parameters'] = {}
+    response = SharedUtilityFunctions.getHelpMain()
     response['parameters']['datasetID'] = {
         "description": "datasetID parameter - Required - ID of the dataset to retreive."}
     response['parameters']['resultID'] = {
@@ -59,7 +40,7 @@ def formatResponse(message, result,resultFiles):
     return results
 
 
-def getDatasetResult(conn, payload):
+def getDatasetResult(conn, payload,logger):
     ds = None
     cursor = conn.cursor()
     query = selectResults + str(payload['resultID'])
@@ -79,21 +60,21 @@ def getDatasetResult(conn, payload):
     return ds
 
 
-def getResultFiles(conn, payload):
-    results = []
+def getResultFiles(conn, payload,logger):
+    data = []
     cursor = conn.cursor()
     query = selectResultFiles + str(payload['resultID'])
     logger.info(query)
     cursor.execute(query)
     res = cursor.fetchall()
-    if(len(res)>1):
-        results=[]
+    #if(len(res)>1):
+    #    results=[]
     for r in res:
         tmp = {}
         tmp['fileID'] = r[0]
         tmp['uploadDate'] = str(r[2])
         tmp['fileName'] = r[3]
-        tmp['URL'] = "https://phenogen.org"+r[5]+r[4]
+        tmp['URL'] = "https://phenogen.org/web/sysbio/downloadLink.jsp?url="+r[5]+r[4]
         tmp['checksum'] = r[6]
         tmp['genomeVersion'] = r[8]
         tmp['description'] = r[9]
@@ -103,16 +84,15 @@ def getResultFiles(conn, payload):
         if(r[12]==1):
             strainMeans=True
         tmp['strainMeans'] = strainMeans
-        results.append(tmp)
+        data.append(tmp)
     cursor.close()
-    return results
+    return data
 
 
 def lambda_handler(event, context):
     operation = 'GET'
-    if ('httpMethod' in event):
-        operation = event['httpMethod']
     message = ""
+    (logger, operation) = SharedUtilityFunctions.setup(event, functionPath, operation)
     if operation == 'GET':
         payload = None
         result = None
@@ -127,41 +107,29 @@ def lambda_handler(event, context):
                 dsID= payload['datasetID']
                 dsrID = payload['resultID']
                 conn = MyDBConnection.ConnectDB()
-                result = getDatasetResult(conn, payload)
+                result = getDatasetResult(conn, payload,logger)
             else:
-                return respond(None, getHelp())
+                return SharedUtilityFunctions.respond(None, getHelp())
         else:
-            return respond(None,getHelp())
+            return SharedUtilityFunctions.respond(None,getHelp())
         if (result is None):
             message = "Dataset(id:"+str(dsID)+") and Result (id:" + str(dsrID) + ") not found. Please double check that you have provided the correct IDs."
-            return respond(InputError('Parameters',message), getHelp())
+            er=SharedUtilityFunctions.InputError('Parameters',message)
+            er.errCode=400
+            return SharedUtilityFunctions.respond(er, getHelp())
         else:
-            resultFiles = getResultFiles(conn, payload)
+            resultFiles = getResultFiles(conn, payload,logger)
         if conn is not None:
             conn.close()
         if result is not None:
             response = formatResponse(message, result,resultFiles)
-            return respond(None, response)
+            return SharedUtilityFunctions.respond(None, response)
         else:
-            return respond(None, {})
-        return respond(InputError('Parameters', 'required parameters missing'),getHelp())
+            return SharedUtilityFunctions.respond(None, {})
+        er=SharedUtilityFunctions.InputError('Parameters', 'required parameters missing')
+        er.errCode=400
+        return SharedUtilityFunctions.respond(er,getHelp())
     else:
-        return respond(InputError('HTTPMethod', 'Unsupported method'))
-
-
-class Error(Exception):
-    """Base class for exceptions in this module."""
-    pass
-
-
-class InputError(Error):
-    """Exception raised for errors in the input.
-
-      Attributes:
-          expression -- input expression in which the error occurred
-          message -- explanation of the error
-      """
-    
-    def __init__(self, expression, message):
-        self.expression = expression
-        self.message = message
+        er=SharedUtilityFunctions.InputError('HTTPMethod', 'Unsupported method')
+        er.errCode=400
+        return SharedUtilityFunctions.respond(er)
