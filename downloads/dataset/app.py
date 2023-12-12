@@ -1,8 +1,9 @@
 import os, json, pymysql, boto3, logging
-import MyDBConnection
+import MyDBConnection,SharedUtilityFunctions
 
-logger = logging.getLogger()
-logger.setLevel(logging.INFO)
+logger = None
+functionPath="downloads/dataset"
+
 
 selectDataset="SELECT * FROM rna_dataset2 where rna_dataset_id="
 selectResults="SELECT * FROM rna_dataset_results where rna_dataset_id="
@@ -18,29 +19,8 @@ selectMetaProtocol = "SELECT rp.RNA_PROTOCOL_ID,rp.title,rp.DESCRIPTION,rp.versi
 
 
 
-def respond(err, res=None):
-    body=""
-    if err :
-        if(res is not None):
-            body={"message":err.message,"help": json.dumps(res)}
-        else:
-            body = {"message": err.message }
-    else:
-        body=res #json.dumps(res)
-    return {
-        'statusCode': '400' if err else '200',
-        'body': body,
-        'headers': {
-            'Content-Type': 'application/json',
-        },
-        'isBase64Encoded': False
-    }
-
-
 def getHelp():
-    response = {}
-    response['methods'] = "GET"
-    response['parameters'] = {}
+    response = SharedUtilityFunctions.getHelpMain()
     response['parameters']['datasetID'] = {
         "description": "datasetID parameter - Required - ID of the dataset to retrieve."}
     return response
@@ -77,7 +57,7 @@ def formatResponse(message,dataset,meta,result):
         }
     return results
 
-def getDataset(conn,payload):
+def getDataset(conn,payload,logger):
     ds={}
     cursor=conn.cursor()
     query=selectDataset+str(payload['datasetID'])
@@ -96,7 +76,7 @@ def getDataset(conn,payload):
     cursor.close()
     return ds
 
-def getMetaData(conn,payload):
+def getMetaData(conn,payload,logger):
     meta={}
     cursor = conn.cursor()
     query=selectMetaPipeline+str(payload['datasetID'])+")"
@@ -176,7 +156,7 @@ def getMetaData(conn,payload):
         protocol['protocolType'] = res[4]
         url=""
         if(not res[5] is None and not res[6] is None):
-            url="https://phenogen.org"+res[6]+"/"+res[5]
+            url="https://phenogen.org/web/sysbio/downloadLink.jsp?url="+res[6]+"/"+res[5]
         protocol['URL'] = url
         protocolList.append(protocol)
     meta['protocols'] = protocolList
@@ -184,7 +164,7 @@ def getMetaData(conn,payload):
     return meta
 
 
-def getResultList(conn, payload):
+def getResultList(conn, payload,logger):
     results=[]
     cursor = conn.cursor()
     query = selectResults + str(payload['datasetID'])
@@ -204,9 +184,8 @@ def getResultList(conn, payload):
 
 def lambda_handler(event, context):
     operation = 'GET'
-    if ('httpMethod' in event):
-        operation = event['httpMethod']
     message = ""
+    (logger, operation) = SharedUtilityFunctions.setup(event, functionPath, operation)
     
     if operation == 'GET':
         payload = None
@@ -218,44 +197,26 @@ def lambda_handler(event, context):
         if ('querystring' in event['params']):
             payload = event['params']['querystring']
         if 'help' in payload:
-            return respond(None,getHelp())
+            return SharedUtilityFunctions.respond(None,getHelp())
         else:
             if("datasetID" in payload and int(payload['datasetID'])>0):
                 dsID=payload['datasetID']
                 conn = MyDBConnection.ConnectDB()
-                dataset = getDataset(conn, payload)
+                dataset = getDataset(conn, payload,logger)
             else:
                 message="missing required parameter:datasetID"
-                return respond(InputError("MissingParameter",message),getHelp())
+                return SharedUtilityFunctions.respond(SharedUtilityFunctions.InputError("MissingParameter",message),getHelp())
             if(dataset is None):
                 message="Dataset (id:"+str(dsID)+") not found."
                 return(message,getHelp())
             else:
-                metaData=getMetaData(conn,payload)
-                results=getResultList(conn,payload)
+                metaData=getMetaData(conn,payload,logger)
+                results=getResultList(conn,payload,logger)
             if conn is not None:
                 conn.close()
             if dataset is not None:
                 results=formatResponse(message,dataset,metaData,results)
-                return respond(None, results)
-            return respond(InputError('Error', 'An error has occurred'))
+                return SharedUtilityFunctions.respond(None, results)
+            return SharedUtilityFunctions.respond(SharedUtilityFunctions.InputError('Error', 'An error has occurred'))
     else:
-        return respond(InputError('HTTPMethod', 'Unsupported method'),getHelp())
-
-
-class Error(Exception):
-    """Base class for exceptions in this module."""
-    pass
-
-
-class InputError(Error):
-    """Exception raised for errors in the input.
-
-      Attributes:
-          expression -- input expression in which the error occurred
-          message -- explanation of the error
-      """
-    
-    def __init__(self, expression, message):
-        self.expression = expression
-        self.message = message
+        return SharedUtilityFunctions.respond(SharedUtilityFunctions.InputError('HTTPMethod', 'Unsupported method'),getHelp())

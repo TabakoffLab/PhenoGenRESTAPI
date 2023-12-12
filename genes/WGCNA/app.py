@@ -1,32 +1,14 @@
 import os, json, pymysql, boto3, logging
-import MyDBConnection
+import MyDBConnection,SharedUtilityFunctions
 
-logger = logging.getLogger()
-logger.setLevel(logging.INFO)
+logger = None
+functionPath="genes/WGCNA"
 
 
-def respond(err, res=None):
-  body = ""
-  if err:
-    if (res is not None):
-      body = {"message": err.message, "help": json.dumps(res)}
-    else:
-      body = {"message": err.message}
-  else:
-    body = res #json.dumps(res)
-  return {
-    'statusCode': '400' if err else '200',
-    'body': body,
-    'headers': {
-      'Content-Type': 'application/json',
-    },
-    'isBase64Encoded': False
-  }
 
 
 def getHelp():
-  response = {}
-  response['parameters'] = {}
+  response = SharedUtilityFunctions.getHelpMain()
   response['parameters']['gene'] = {
     "description": "Gene parameter - Required - This parameter is required to find modules containing the gene.  This should correspond to a PhenoGen ID or an Affy Transcript Cluster ID of the gene."}
   return response
@@ -122,22 +104,26 @@ def getModuleList(geneID, dataType, panel, tissue, genomeVer, version, conn):
         "WGCNADatasetID": wgcnaID[0]
       },
       "data": moduleList}
-    return respond(None, resultDict)
+    return SharedUtilityFunctions.respond(None, resultDict)
   else:
-    return respond(InputError("No WGCNA Dataset", "No WGCNA Dataset was found with the specified parameters."))
+    return SharedUtilityFunctions.respond(SharedUtilityFunctions.InputError("No WGCNA Dataset", "No WGCNA Dataset was found with the specified parameters."))
 
 
 def getModuleData(wgcnaID, moduleID, moduleName, dataType, panel, tissue, genomeVer, version, conn):
   if (int(wgcnaID) < 0):
     wgcnaID = getWGCNADatasetID(tissue, panel, genomeVer, dataType, version, conn)
   if (int(wgcnaID) > 0):
-    return respond(
-      InputError("Not Yet Implemented", "This function is not yet fully implemented Please check back mid Sept 2019"))
+    return SharedUtilityFunctions.respond(
+      SharedUtilityFunctions.InputError("Not Yet Implemented", "This function is not yet fully implemented Please check back mid Sept 2019"))
   else:
-    return respond(InputError("No WGCNA Dataset", "No WGCNA Dataset was found with the specified parameters."))
+    return SharedUtilityFunctions.respond(SharedUtilityFunctions.InputError("No WGCNA Dataset", "No WGCNA Dataset was found with the specified parameters."))
 
 
 def lambda_handler(event, context):
+  logger = SharedUtilityFunctions.setupLog()
+  ip = event['context']['source-ip']
+  SharedUtilityFunctions.sendSQSMessage(functionPath, ip)
+
   message = ""
   geneID = ""
   dataType = "seq"
@@ -184,24 +170,7 @@ def lambda_handler(event, context):
     elif (moduleID != "" or moduleName != ""):
       return getModuleData(wgcnaID, moduleID, moduleName, dataType, panel, tissue, genomeVer, version, conn)
     else:
-      return respond(None, getHelp())
+      return SharedUtilityFunctions.respond(None, getHelp())
   else:
-    return respond(None, getHelp())
+    return SharedUtilityFunctions.respond(None, getHelp())
 
-
-class Error(Exception):
-  """Base class for exceptions in this module."""
-  pass
-
-
-class InputError(Error):
-  """Exception raised for errors in the input.
-
-    Attributes:
-        expression -- input expression in which the error occurred
-        message -- explanation of the error
-    """
-  
-  def __init__(self, expression, message):
-    self.expression = expression
-    self.message = message

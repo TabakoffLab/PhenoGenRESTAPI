@@ -1,24 +1,8 @@
 import os, json, pymysql
-import boto3,MyDBConnection
+import boto3,MyDBConnection, SharedUtilityFunctions
 
-
-def respond(err, res=None):
-  body = ""
-  if err:
-    if (res is not None):
-      body = {"message": err.message, "help": json.dumps(res)}
-    else:
-      body = {"message": err.message}
-  else:
-    body = res #json.dumps(res)
-  return {
-    'statusCode': '400' if err else '200',
-    'body': body,
-    'headers': {
-      'Content-Type': 'application/json',
-    },
-    'isBase64Encoded': False
-  }
+logger=None
+functionPath="genes/gene"
 
 
 def genericReport(report):
@@ -34,8 +18,7 @@ def transcriptReport(report):
 
 
 def getHelp():
-  response = {}
-  response['parameters'] = {}
+  response=SharedUtilityFunctions.getHelpMain()
   response['parameters'][
     'gene'] = "Gene parameter - Required - This parameter is required to pull up a gene report.  This should correspond to the ensembl ID or PhenoGen ID of the gene."
   response['parameters'][
@@ -50,6 +33,9 @@ def ensemblClient(request):
 
 
 def lambda_handler(event, context):
+  logger = SharedUtilityFunctions.setupLog()
+  ip = event['context']['source-ip']
+  SharedUtilityFunctions.sendSQSMessage(functionPath, ip)
   operation = 'GET'
   if('httpMethod' in event):
     operation=event['httpMethod']
@@ -63,7 +49,7 @@ def lambda_handler(event, context):
       if ('gene' in payload):
         geneID = payload['gene']
       else:
-        return respond(InputError('gene', 'Gene parameter is required'))
+        return SharedUtilityFunctions.respond(SharedUtilityFunctions.InputError('gene', 'Gene parameter is required'))
       if ('report' in payload):
         report = payload['report']
       report = {"payload": payload}
@@ -72,26 +58,9 @@ def lambda_handler(event, context):
         snpReport(report)
       elif (report == "Transcript"):
         transcriptReport(report)
-      return respond(None, report)
+      return SharedUtilityFunctions.respond(None, report)
     else:
-      return respond(None, getHelp())
+      return SharedUtilityFunctions.respond(None, getHelp())
   else:
-    return respond(InputError('HTTPMethod', 'Unsupported method ' + format(operation)))
+    return SharedUtilityFunctions.respond(SharedUtilityFunctions.InputError('HTTPMethod', 'Unsupported method ' + format(operation)))
 
-
-class Error(Exception):
-  """Base class for exceptions in this module."""
-  pass
-
-
-class InputError(Error):
-  """Exception raised for errors in the input.
-
-    Attributes:
-        expression -- input expression in which the error occurred
-        message -- explanation of the error
-    """
-  
-  def __init__(self, expression, message):
-    self.expression = expression
-    self.message = message
