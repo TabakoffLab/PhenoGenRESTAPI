@@ -1,7 +1,8 @@
 import os, json, pymysql, logging
-import boto3, MyDBConnection
-logger = logging.getLogger()
-logger.setLevel(logging.INFO)
+import boto3, MyDBConnection,SharedUtilityFunctions
+
+logger = None
+functionPath="genes/idLookup"
 
 
 def getHelp(conn):
@@ -9,9 +10,7 @@ def getHelp(conn):
   newList = []
   for t in targetList:
     newList.append(str(t))
-  response = {}
-  response['methods']="GET"
-  response['parameters'] = {}
+  response=SharedUtilityFunctions.getHelpMain()
   response['parameters']['gene'] = {"description": "Gene parameter - Required - Any supported Gene ID"}
   response['parameters']['organism'] = {
     "description": "Organism parameter - This parameter specifies the species to use to find the ID specified.",
@@ -25,24 +24,6 @@ def getHelp(conn):
   conn.close()
   return response
 
-
-def respond(err, res=None):
-  body = ""
-  if err:
-    if (res is not None):
-      body = {"message": err.message, "help": json.dumps(res)}
-    else:
-      body = {"message": err.message}
-  else:
-    body = res  # json.dumps(res)
-  return {
-    'statusCode': '400' if err else '200',
-    'body': body,
-    'headers': {
-      'Content-Type': 'application/json',
-    },
-    'isBase64Encoded': False
-  }
 
 def getTargetValues(conn):
   ret = {}
@@ -59,6 +40,9 @@ def getTargetValues(conn):
 
 
 def lambda_handler(event, context):
+  logger = SharedUtilityFunctions.setupLog()
+  ip = event['context']['source-ip']
+  SharedUtilityFunctions.sendSQSMessage(functionPath, ip)
   operation = 'GET'
   if('httpMethod' in event):
     operation=event['httpMethod']
@@ -74,7 +58,7 @@ def lambda_handler(event, context):
       payload = event['params']['querystring']
       
     if 'help' in payload:
-      return respond(None, getHelp(conn))
+      return SharedUtilityFunctions.respond(None, getHelp(conn))
     
     if (payload != None):
       if ('gene' in payload):
@@ -136,29 +120,14 @@ def lambda_handler(event, context):
             "ResultCount": len(IDs)
           },
           "data": IDs}
-        return respond(None, resultDict)
+        return SharedUtilityFunctions.respond(None, resultDict)
       else:
-        return respond(
-          InputError("Missing Parameter", "gene is a required parameter.  Call with no parameters for Help."))
+        return SharedUtilityFunctions.respond(
+          SharedUtilityFunctions.InputError("Missing Parameter", "gene is a required parameter.  Call with no parameters for Help."))
     else:
-      return respond(None, getHelp(conn))
+      return SharedUtilityFunctions.respond(None, getHelp(conn))
   else:
-    return respond(InputError('HTTPMethod', 'Unsupported method ' + format(operation)))
+    return SharedUtilityFunctions.respond(SharedUtilityFunctions.InputError('HTTPMethod', 'Unsupported method ' + format(operation)))
 
 
-class Error(Exception):
-  """Base class for exceptions in this module."""
-  pass
 
-
-class InputError(Error):
-  """Exception raised for errors in the input.
-
-  Attributes:
-      expression -- input expression in which the error occurred
-      message -- explanation of the error
-  """
-  
-  def __init__(self, expression, message):
-    self.expression = expression
-    self.message = message

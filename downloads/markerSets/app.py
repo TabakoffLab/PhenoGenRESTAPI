@@ -1,6 +1,8 @@
 import os,  boto3
 import MyDBConnection,SharedUtilityFunctions
 
+logger=None
+functionPath="downloads/markerSets"
 
 selectDataset="select * from misc_download_groups"
 
@@ -47,7 +49,9 @@ def getMarkerSets(conn,payload):
     return ds
 
 def lambda_handler(event, context):
-    SharedUtilityFunctions.setupLog()
+    logger=SharedUtilityFunctions.setupLog()
+    ip = event['context']['source-ip']
+    SharedUtilityFunctions.sendSQSMessage(functionPath, ip)
     operation = 'GET'
     if 'httpMethod' in event:
         operation = event['httpMethod']
@@ -65,6 +69,6 @@ def lambda_handler(event, context):
             results=SharedUtilityFunctions.formatResponse(message,datasets)
             return SharedUtilityFunctions.respond(None, results)
     else:
-        return SharedUtilityFunctions.respond(InputError("HTTPMethod","Unsupported Method"),getHelp())
+        return SharedUtilityFunctions.respond(SharedUtilityFunctions.InputError("HTTPMethod","Unsupported Method"),getHelp())
 
 

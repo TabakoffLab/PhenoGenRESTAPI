@@ -1,34 +1,15 @@
-import os, json, pymysql, boto3, logging
-import MyDBConnection
-
-logger = logging.getLogger()
-logger.setLevel(logging.INFO)
+import os,json
+import MyDBConnection,SharedUtilityFunctions
 
 selectDataset="select * from rna_dataset2"
 
-def respond(err, res=None):
-    body=""
-    if err :
-        if(res is not None):
-            body={"message":err.message,"help": json.dumps(res)}
-        else:
-            body = {"message": err.message }
-    else:
-        body=res #json.dumps(res)
-    return {
-        'statusCode': '400' if err else '200',
-        'body': body,
-        'headers': {
-            'Content-Type': 'application/json',
-        },
-        'isBase64Encoded': False
-    }
+logger=None
+functionPath="downloads/datasets"
+
 
 
 def getHelp():
-    response = {}
-    response['methods'] = "GET"
-    response['parameters'] = {}
+    response = SharedUtilityFunctions.getHelpMain()
     response['parameters']['genomeVer'] = {
         "description": "genomeVer parameter - Optional parameter to filter results to a specific genome version."}
     response['parameters']['organism'] = {
@@ -42,15 +23,6 @@ def getHelp():
         "description": "tissue parameter - Optional parameter to filter results to a specific tissue. Note: Please use Brain instead of 'Whole Brain'"}
     return response
 
-def formatResponse(message,datasets):
-    results={}
-    results = {
-        "message": message,
-        "parameters": {
-            "ResultCount": len(datasets)
-        },
-        "data": datasets}
-    return results
 
 def getDatasets(conn,payload):
     ds=[]
@@ -120,39 +92,21 @@ def getDatasets(conn,payload):
 
 def lambda_handler(event, context):
     operation = 'GET'
-    if ('httpMethod' in event):
-        operation = event['httpMethod']
     message = ""
+    (logger, operation) = SharedUtilityFunctions.setup(event, functionPath, operation)
     
     if operation == 'GET':
         payload = None
         if ('querystring' in event['params']):
             payload = event['params']['querystring']
         if 'help' in payload:
-            return respond(None,getHelp())
+            return SharedUtilityFunctions.respond(None,getHelp())
         else:
             conn = MyDBConnection.ConnectDB()
             datasets=getDatasets(conn,payload)
             conn.close()
-            results=formatResponse(message,datasets)
-            return respond(None, results)
+            results=SharedUtilityFunctions.formatResponse(message,datasets)
+            return SharedUtilityFunctions.respond(None, results)
     else:
-        return respond(InputError("HTTPMethod","Unsupported Method"),getHelp())
+        return SharedUtilityFunctions.respond(SharedUtilityFunctions.InputError("HTTPMethod","Unsupported Method"),getHelp())
 
-
-class Error(Exception):
-    """Base class for exceptions in this module."""
-    pass
-
-
-class InputError(Error):
-    """Exception raised for errors in the input.
-
-      Attributes:
-          expression -- input expression in which the error occurred
-          message -- explanation of the error
-      """
-    
-    def __init__(self, expression, message):
-        self.expression = expression
-        self.message = message
